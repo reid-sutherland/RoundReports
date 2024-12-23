@@ -385,14 +385,14 @@
             if (!ev.IsAllowed || ev.Players.Count < 1) return;
             MiscStats stats = GetStat<MiscStats>();
 
-            if (ev.NextKnownTeam is Respawning.SpawnableTeamType.NineTailedFox)
+            if (ev.NextKnownTeam is Respawning.SpawnableFaction.NtfWave || ev.NextKnownTeam is Respawning.SpawnableFaction.NtfMiniWave) //maybe log MiniWaves seperately
             {
                 if (IsUIUTeamSpawnable())
                     stats.SpawnWaves.Add("UIU");
                 else if (ev.IsAllowed)
                     stats.SpawnWaves.Add("Nine Tailed Fox");
             }
-            else if (ev.NextKnownTeam is Respawning.SpawnableTeamType.ChaosInsurgency)
+            else if (ev.NextKnownTeam is Respawning.SpawnableFaction.ChaosWave || ev.NextKnownTeam is Respawning.SpawnableFaction.ChaosMiniWave)
             {
                 if (IsSerpentsHandTeamSpawnable())
                     stats.SpawnWaves.Add("Serpent's Hand");
@@ -1073,8 +1073,8 @@
                 MainPlugin.Reporter.AddRemark(escapeText);
                 IncrementPoints(ev.Player, MvpSettings.Points.Escaped, MainPlugin.Translations.Escaped);
                 return;
-            }            
-            
+            }
+
             IncrementPoints(ev.Player, MvpSettings.Points.Escaped, MainPlugin.Translations.Escaped);
         }
 
