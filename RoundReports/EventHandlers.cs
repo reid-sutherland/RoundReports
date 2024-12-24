@@ -385,14 +385,14 @@
             if (!ev.IsAllowed || ev.Players.Count < 1) return;
             MiscStats stats = GetStat<MiscStats>();
 
-            if (ev.NextKnownTeam is SpawnableFaction.NtfWave || ev.NextKnownTeam is SpawnableFaction.NtfMiniWave) //maybe log MiniWaves seperately
+            if (ev.NextKnownTeam is PlayerRoles.Faction.FoundationStaff)
             {
                 if (IsUIUTeamSpawnable())
                     stats.SpawnWaves.Add("UIU");
                 else if (ev.IsAllowed)
                     stats.SpawnWaves.Add("Nine Tailed Fox");
             }
-            else if (ev.NextKnownTeam is SpawnableFaction.ChaosWave || ev.NextKnownTeam is SpawnableFaction.ChaosMiniWave)
+            else if (ev.NextKnownTeam is PlayerRoles.Faction.FoundationEnemy)
             {
                 if (IsSerpentsHandTeamSpawnable())
                     stats.SpawnWaves.Add("Serpent's Hand");
