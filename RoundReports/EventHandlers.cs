@@ -570,7 +570,8 @@
                 else
                     IncrementPoints(ev.Attacker, MvpSettings.Points.KillEnemy, MainPlugin.Translations.KilledEnemy); // Other kills
 
-                // Grant points to SCP-079 if death in a locked down/blackout room
+                // The following code is commented out since the Scp079RewardManager changed some internal logic.
+                /* Grant points to SCP-079 if death in a locked down/blackout room
                 if (GetTeam(ev.Attacker) is CustomTeam.SCPs || ev.DamageHandler.Type == DamageType.CardiacArrest)
                 {
                     foreach (Player player in Player.Get(ECheck))
@@ -579,6 +580,7 @@
                             IncrementPoints(player, MvpSettings.Points.Scp079AssistKill, MainPlugin.Translations.AssistKill);
                     }
                 }
+                */
             }
 
             // Edge case for SCP-049 kills
