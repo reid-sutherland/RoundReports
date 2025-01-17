@@ -158,10 +158,11 @@
             foreach (Player player in Player.Get(plr => plr.IsAlive && EventHandlers.ECheck(plr)))
                 SurvivingPlayers.Add($"{Reporter.GetDisplay(player, typeof(Player))} ({EventHandlers.GetRole(player)})");
 
-            KeyValuePair<Player, float>? talker = MainPlugin.Handlers.Talkers.OrderByDescending(r => r.Value).FirstOrDefault();
-            if (talker is not null && talker.HasValue)
+            IOrderedEnumerable<KeyValuePair<Player, float>> orderedTalkers = MainPlugin.Handlers.Talkers.OrderByDescending(r => r.Value);
+            if (orderedTalkers.Any())
             {
-                MostTalkativePlayer = $"{talker.Value.Key.Nickname} ({Reporter.GetDisplay(TimeSpan.FromSeconds(talker.Value.Value))})";
+                KeyValuePair<Player, float> talker = orderedTalkers.First();
+                MostTalkativePlayer = $"{talker.Key.Nickname} ({Reporter.GetDisplay(TimeSpan.FromSeconds(talker.Value))})";
             }
         }
     }
