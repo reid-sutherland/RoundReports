@@ -69,7 +69,7 @@ MVP is calculated by granting players points for specific actions. These points 
 | Tesla Gate Kill (SCP-079)             | +5               |
 | Kill Scientist                        | +3               |
 | Kill Player (Not Scientist)           | +2               |
-| Open Door (SCP-079)                   | +0-2\*\*         |
+| Open Door (SCP-079)                   | +0+2\*\*         |
 | Kill Assist (SCP-079)                 | +1\*             |
 | Capture Player (SCP-106)              | +1               |
 | Die (Most Causes)                     | -5               |
