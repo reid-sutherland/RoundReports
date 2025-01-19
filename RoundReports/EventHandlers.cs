@@ -642,7 +642,7 @@
             {
                 foreach (Player player in Player.Get(ECheck))
                 {
-                    if (player.Role is Scp079Role role && role.SubroutineModule.TryGetSubroutine(out Scp079RewardManager manager) && manager._markedRooms.ContainsKey(ev.Player.CurrentRoom.Identifier))
+                    if (player.Role is Scp079Role role && role.MarkedRooms.Contains(ev.Player.CurrentRoom))
                         IncrementPoints(player, MvpSettings.Points.Scp079AssistKill, MainPlugin.Translations.AssistKill);
                 }
             }
