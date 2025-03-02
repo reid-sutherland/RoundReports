@@ -3,6 +3,7 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Text;
@@ -507,8 +508,32 @@
             yield return Timing.WaitForSeconds(0.5f);
             PasteEntry reportData = BuildReport();
 
-            Log.Debug("Report upload request received, step: 4.");
-            Timing.RunCoroutine(TryUpload(reportData));
+            TryWriteToFile(reportData);
+
+            // TODO: Upload it to something that works or just remove Upload
+            //Log.Debug("Report upload request received, step: 4.");
+            //Timing.RunCoroutine(TryUpload(reportData));
+        }
+
+        /// <summary>
+        /// Simple method to write the report to a file.
+        /// </summary>
+        private void TryWriteToFile(PasteEntry data)
+        {
+            // TOOD: Replace this with a dynamic server path
+            string filepath = "C:\\Users\\Reid\\Desktop\\SCPServer\\ROUND_REPORT.txt";
+            Log.Info($"Writing round report to file: {filepath}");
+            try
+            {
+                // TODO: Fix the formatting on serialize
+                //  - each "contents" section shows a bunch of ugly \r\n all on one line
+                //  - lots of "No data"s in the output, but i think that's just from testing
+                File.WriteAllText(filepath, JsonConvert.SerializeObject(data, Formatting.Indented));
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occurred writing report to file: {ex}");
+            }
         }
 
         /// <summary>
