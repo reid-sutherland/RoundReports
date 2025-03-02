@@ -385,20 +385,21 @@
             if (!ev.IsAllowed || ev.Players.Count < 1) return;
             MiscStats stats = GetStat<MiscStats>();
 
-            if (ev.NextKnownTeam is Respawning.SpawnableTeamType.NineTailedFox)
-            {
-                if (IsUIUTeamSpawnable())
-                    stats.SpawnWaves.Add("UIU");
-                else if (ev.IsAllowed)
-                    stats.SpawnWaves.Add("Nine Tailed Fox");
-            }
-            else if (ev.NextKnownTeam is Respawning.SpawnableTeamType.ChaosInsurgency)
-            {
-                if (IsSerpentsHandTeamSpawnable())
-                    stats.SpawnWaves.Add("Serpent's Hand");
-                else if (ev.IsAllowed)
-                    stats.SpawnWaves.Add("Chaos Insurgency");
-            }
+            // TODO: Fix this code lol
+            //if (ev.NextKnownTeam is Respawning.SpawnableTeamType.NineTailedFox)
+            //{
+            //    if (IsUIUTeamSpawnable())
+            //        stats.SpawnWaves.Add("UIU");
+            //    else if (ev.IsAllowed)
+            //        stats.SpawnWaves.Add("Nine Tailed Fox");
+            //}
+            //else if (ev.NextKnownTeam is Respawning.SpawnableTeamType.ChaosInsurgency)
+            //{
+            //    if (IsSerpentsHandTeamSpawnable())
+            //        stats.SpawnWaves.Add("Serpent's Hand");
+            //    else if (ev.IsAllowed)
+            //        stats.SpawnWaves.Add("Chaos Insurgency");
+            //}
 
             Hold(stats);
         }
@@ -758,6 +759,7 @@
             Hold(stats);
         }
 
+        // TODO: Find an event for this
         /// <summary>
         /// Called when a player damages a window.
         /// </summary>

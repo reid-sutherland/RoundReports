@@ -139,7 +139,8 @@
             PlayerEvents.Shooting += Handlers.OnShooting;
             PlayerEvents.ReloadingWeapon += Handlers.OnReloadingWeapon;
             PlayerEvents.UnlockingGenerator += Handlers.OnUnlockingGenerator;
-            PlayerEvents.PlayerDamageWindow += Handlers.OnDamagingWindow;
+            // TODO: 
+            //PlayerEvents.PlayerDamageWindow += Handlers.OnDamagingWindow;
 
             Scp049Events.FinishingRecall += Handlers.OnScp049Recalling;
 
@@ -200,7 +201,8 @@
                 Log.Error($"Harmony patching failed! {e}");
             }
 
-            ScriptedEventsIntegration.AddCustomActions();
+            // TODO: Fix scripted events integration
+            //ScriptedEventsIntegration.AddCustomActions();
             base.OnEnabled();
         }
 
@@ -233,7 +235,8 @@
             PlayerEvents.Shooting -= Handlers.OnShooting;
             PlayerEvents.ReloadingWeapon -= Handlers.OnReloadingWeapon;
             PlayerEvents.UnlockingGenerator -= Handlers.OnUnlockingGenerator;
-            PlayerEvents.PlayerDamageWindow -= Handlers.OnDamagingWindow;
+            // TODO: 
+            //PlayerEvents.PlayerDamageWindow -= Handlers.OnDamagingWindow;
 
             Scp049Events.FinishingRecall -= Handlers.OnScp049Recalling;
 
@@ -272,7 +275,8 @@
             Handlers = null;
             Harmony = null;
 
-            ScriptedEventsIntegration.UnregisterCustomActions();
+            // TODO: Fix scripted events integration
+            //ScriptedEventsIntegration.UnregisterCustomActions();
             base.OnDisabled();
         }
     }
