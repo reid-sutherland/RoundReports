@@ -352,6 +352,7 @@
         /// </summary>
         public void OnRestarting()
         {
+            Log.Debug("OnRestarting: Round is restarting");
             MainPlugin.IsRestarting = true;
             if (MainPlugin.Reporter is not null && !MainPlugin.Reporter.HasSent && !FinalStatsFilledOut)
             {
@@ -367,6 +368,7 @@
         /// <param name="ev">Event arguments.</param>
         public void OnRoundEnded(RoundEndedEventArgs ev)
         {
+            Log.Debug("Round has ended");
             if (MainPlugin.Reporter is not null && !MainPlugin.Reporter.HasSent && !FinalStatsFilledOut)
             {
                 FinalStatsFilledOut = true;

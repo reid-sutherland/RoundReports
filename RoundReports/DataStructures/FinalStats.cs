@@ -158,10 +158,17 @@
             foreach (Player player in Player.Get(plr => plr.IsAlive && EventHandlers.ECheck(plr)))
                 SurvivingPlayers.Add($"{Reporter.GetDisplay(player, typeof(Player))} ({EventHandlers.GetRole(player)})");
 
+            // Give this a default value up front in case there are nulls
+            MostTalkativePlayer = "Dedicated Server (420ms)";
+
             KeyValuePair<Player, float>? talker = MainPlugin.Handlers.Talkers.OrderByDescending(r => r.Value).FirstOrDefault();
             if (talker is not null && talker.HasValue)
             {
-                MostTalkativePlayer = $"{talker.Value.Key.Nickname} ({Reporter.GetDisplay(TimeSpan.FromSeconds(talker.Value.Value))})";
+                // if nobody talked then Key (Player) will be null and throw an exception
+                if (talker.Value.Key is not null)
+                {
+                    MostTalkativePlayer = $"{talker.Value.Key.Nickname} ({Reporter.GetDisplay(TimeSpan.FromSeconds(talker.Value.Value))})";
+                }
             }
         }
     }

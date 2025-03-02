@@ -467,12 +467,14 @@
                     }
 
                     section.Contents = StringBuilderPool.Pool.ToStringReturn(bldr).Trim();
-                    if (string.IsNullOrEmpty(section.Contents)) continue;
-                    entry.Sections.Add(section);
+                    if (!string.IsNullOrEmpty(section.Contents))
+                    {
+                        entry.Sections.Add(section);
+                    }
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    Log.Warn(e);
+                    Log.Warn($"Error adding {stat.Title} ({stat.GetType()}) to report: {ex}");
                 }
             }
 
