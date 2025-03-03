@@ -72,7 +72,7 @@
         public override string Name => "RoundReports";
 
         /// <inheritdoc/>
-        public override string Author => "Thunder";
+        public override string Author => "ReidSutherland";
 
         /// <inheritdoc/>
         public override Version Version => new(1, 0, 2);
@@ -192,7 +192,7 @@
             // Harmony patching
             try
             {
-                Harmony = new Harmony($"thunder.roundreports.{DateTime.UtcNow.Ticks}");
+                Harmony = new Harmony($"reid.roundreports.{DateTime.UtcNow.Ticks}");
                 Harmony.PatchAll();
                 Log.Info("Harmony patching success!");
             }

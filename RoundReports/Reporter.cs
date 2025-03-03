@@ -24,7 +24,7 @@
         /// <summary>
         /// Link to the Round Reports repository.
         /// </summary>
-        public const string RepoUrl = "https://github.com/Thundermaker300/RoundReports";
+        public const string RepoUrl = "https://github.com/reid-sutherland/RoundReports";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Reporter"/> class.
