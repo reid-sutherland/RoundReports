@@ -900,7 +900,7 @@
         public void OnUsedItem(UsedItemEventArgs ev)
         {
             if (!Round.InProgress || !ECheck(ev.Player)) return;
-            if (ev.Item.Type.IsScp())
+            if (ev.Item.Type.IsScp() && ev.Item.Type != ItemType.SCP500)
             {
                 SCPStats stats = GetStat<SCPStats>();
                 switch (ev.Item.Type)
