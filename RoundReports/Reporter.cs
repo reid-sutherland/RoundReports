@@ -511,8 +511,8 @@
             TryWriteToFile(reportData);
 
             // TODO: Upload it to something that works or just remove Upload
-            //Log.Debug("Report upload request received, step: 4.");
-            //Timing.RunCoroutine(TryUpload(reportData));
+            Log.Debug("Report upload request received, step: 4.");
+            Timing.RunCoroutine(TryUpload(reportData));
         }
 
         /// <summary>
@@ -622,7 +622,7 @@
                                 new()
                                 {
                                     Title = ProcessReportArgs(config.Embed.Title),
-                                    Url = RepoUrl,
+                                    Url = response.Link,
                                     TimeStamp = !config.Embed.IncludeTimestamp ? null : DateTime.Now,
                                     Color = config.Embed.EmbedColorType is EmbedColorType.WinningTeam ? WinTeam switch
                                     {
