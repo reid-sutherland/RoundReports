@@ -75,7 +75,6 @@
         PainkillersConsumed,
         MedkitsConsumed,
         AdrenalinesConsumed,
-        SCP500sConsumed,
 
         //-- Firearm
         TotalShotsFired,
@@ -96,10 +95,15 @@
         Scp939Lunges,
         Scp939Clouds,
 
+        //-- SCP Items
         Scp018sThrown,
         Scp207sDrank,
+        Scp244sPlaced,
         Scp268Uses,
+        Scp500sConsumed,
+        Scp1576Uses,
         Scp1853Uses,
+        Scp2176sThrown,
 
         //-- SCP-330
         First330Use,

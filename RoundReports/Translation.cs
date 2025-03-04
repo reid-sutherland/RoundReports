@@ -115,8 +115,6 @@
 
         public string AdrenalinesConsumed { get; set; } = "Adrenalines Consumed";
 
-        public string Scp500sConsumed { get; set; } = "SCP-500s Consumed";
-
         // Firearm Stats
         public string FirearmTitle { get; set; } = "Firearm Stats";
 
@@ -191,13 +189,21 @@
 
         public string ScpItemTitle { get; set; } = "SCP Item Statistics";
 
-        public string Scp018Thrown { get; set; } = "SCP-018s Thrown";
+        public string Scp018sThrown { get; set; } = "SCP-018s Thrown";
 
-        public string Scp207Drank { get; set; } = "SCP-207s Drank";
+        public string Scp207sDrank { get; set; } = "SCP-207s Drank";
+
+        public string Scp244sPlaced { get; set; } = "SCP-244s Placed";
 
         public string Scp268Uses { get; set; } = "SCP-268 Uses";
 
+        public string Scp500sConsumed { get; set; } = "SCP-500s Consumed";
+
+        public string Scp1576Uses { get; set; } = "SCP-1576 Uses";
+
         public string Scp1853Uses { get; set; } = "SCP-1853 Uses";
+
+        public string Scp2176sThrown { get; set; } = "SCP-2176s Thrown";
 
         // SCP Stats
         [Description("The following SCP-related stats only show on the report if each is activated at least once.")]

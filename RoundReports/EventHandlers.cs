@@ -902,48 +902,50 @@
         public void OnUsedItem(UsedItemEventArgs ev)
         {
             if (!Round.InProgress || !ECheck(ev.Player)) return;
-            if (ev.Item.Type.IsScp() && ev.Item.Type != ItemType.SCP500)
-            {
-                SCPStats stats = GetStat<SCPStats>();
-                switch (ev.Item.Type)
-                {
-                    case ItemType.SCP018:
-                        stats.Scp018Thrown++;
-                        break;
-                    case ItemType.SCP207:
-                        stats.Scp207Drank++;
-                        break;
-                    case ItemType.SCP268:
-                        stats.Scp268Uses++;
-                        break;
-                    case ItemType.SCP1853:
-                        stats.Scp1853Uses++;
-                        break;
-                }
 
-                Hold(stats);
-            }
-            else
+            // TODO: Need to fix SCP-018, throwing the ball doesn't even trigger this event oddly
+            ItemStats itemStats = GetStat<ItemStats>();
+            SCPStats scpStats = GetStat<SCPStats>();
+            switch (ev.Item.Type)
             {
-                ItemStats stats = GetStat<ItemStats>();
-                switch (ev.Item.Type)
-                {
-                    case ItemType.Painkillers:
-                        stats.PainkillersConsumed++;
-                        break;
-                    case ItemType.Medkit:
-                        stats.MedkitsConsumed++;
-                        break;
-                    case ItemType.Adrenaline:
-                        stats.AdrenalinesConsumed++;
-                        break;
-                    case ItemType.SCP500:
-                        stats.SCP500sConsumed++;
-                        break;
-                }
-
-                Hold(stats);
+                case ItemType.Painkillers:
+                    itemStats.PainkillersConsumed++;
+                    break;
+                case ItemType.Medkit:
+                    itemStats.MedkitsConsumed++;
+                    break;
+                case ItemType.Adrenaline:
+                    itemStats.AdrenalinesConsumed++;
+                    break;
+                case ItemType.SCP018:
+                    scpStats.Scp018sThrown++;
+                    break;
+                case ItemType.SCP207:
+                    scpStats.Scp207sDrank++;
+                    break;
+                case ItemType.SCP244a:
+                    // this is the one that spawns in a locker
+                    scpStats.Scp244sPlaced++;
+                    break;
+                case ItemType.SCP268:
+                    scpStats.Scp268Uses++;
+                    break;
+                case ItemType.SCP500:
+                    scpStats.Scp500sConsumed++;
+                    break;
+                case ItemType.SCP1576:
+                    scpStats.Scp1576Uses++;
+                    break;
+                case ItemType.SCP1853:
+                    scpStats.Scp1853Uses++;
+                    break;
+                case ItemType.SCP2176:
+                    scpStats.Scp2176sThrown++;
+                    break;
             }
+
+            Hold(itemStats);
+            Hold(scpStats);
         }
 
         /// <summary>

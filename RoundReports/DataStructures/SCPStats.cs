@@ -17,6 +17,10 @@
 
         public int Order => 7;
 
+        /////////////////////////////////////////////////////////
+        // SCPs (SCP Team)
+        /////////////////////////////////////////////////////////
+
         [Header(nameof(Translation.ScpTitle))]
         [HideIfDefault]
         [Translation(nameof(Translation.Scp049Revives))]
@@ -73,22 +77,49 @@
         [BindStat(StatType.Scp939Clouds)]
         public int Scp939Clouds { get; set; }
 
-        [Header(nameof(Translation.ScpItemTitle))]
-        [Translation(nameof(Translation.Scp018Thrown))]
-        [BindStat(StatType.Scp018sThrown)]
-        public int Scp018Thrown { get; set; }
+        /////////////////////////////////////////////////////////
+        // SCP Items
+        /////////////////////////////////////////////////////////
 
-        [Translation(nameof(Translation.Scp207Drank))]
+        [Header(nameof(Translation.ScpItemTitle))]
+        [Translation(nameof(Translation.Scp018sThrown))]
+        [BindStat(StatType.Scp018sThrown)]
+        public int Scp018sThrown { get; set; }
+
+        [Translation(nameof(Translation.Scp207sDrank))]
         [BindStat(StatType.Scp207sDrank)]
-        public int Scp207Drank { get; set; }
+        public int Scp207sDrank { get; set; }
+
+        [HideIfDefault]
+        [Translation(nameof(Translation.Scp244sPlaced))]
+        [BindStat(StatType.Scp244sPlaced)]
+        public int Scp244sPlaced { get; set; }
 
         [Translation(nameof(Translation.Scp268Uses))]
         [BindStat(StatType.Scp268Uses)]
         public int Scp268Uses { get; set; }
 
+        [Translation(nameof(Translation.Scp500sConsumed))]
+        [BindStat(StatType.Scp500sConsumed)]
+        public int Scp500sConsumed { get; set; }
+
+        [HideIfDefault]
+        [Translation(nameof(Translation.Scp1576Uses))]
+        [BindStat(StatType.Scp1576Uses)]
+        public int Scp1576Uses { get; set; }
+
         [Translation(nameof(Translation.Scp1853Uses))]
         [BindStat(StatType.Scp1853Uses)]
         public int Scp1853Uses { get; set; }
+
+        [HideIfDefault]
+        [Translation(nameof(Translation.Scp2176sThrown))]
+        [BindStat(StatType.Scp2176sThrown)]
+        public int Scp2176sThrown { get; set; }
+
+        /////////////////////////////////////////////////////////
+        // SCP-330 (Candy)
+        /////////////////////////////////////////////////////////
 
         [Header(nameof(Translation.Scp330Title))]
         [Translation(nameof(Translation.FirstUse))]
@@ -115,6 +146,10 @@
         [Translation(nameof(Translation.CandiesByPlayer))]
         [BindStat(StatType.CandiesByPlayer)]
         public Dictionary<Player, int> CandiesByPlayer { get; set; }
+
+        /////////////////////////////////////////////////////////
+        // SCP-914 (Upgrades)
+        /////////////////////////////////////////////////////////
 
         [Header(nameof(Translation.Scp914Title))]
         [Translation(nameof(Translation.FirstActivation))]

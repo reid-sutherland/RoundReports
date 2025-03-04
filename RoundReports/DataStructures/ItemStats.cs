@@ -43,10 +43,6 @@
         [BindStat(StatType.AdrenalinesConsumed)]
         public int AdrenalinesConsumed { get; set; }
 
-        [Translation(nameof(Translation.Scp500sConsumed))]
-        [BindStat(StatType.SCP500sConsumed)]
-        public int SCP500sConsumed { get; set; }
-
         [Header(nameof(Translation.FirearmTitle))]
         [Translation(nameof(Translation.TotalShotsFired))]
         [BindStat(StatType.TotalShotsFired)]
