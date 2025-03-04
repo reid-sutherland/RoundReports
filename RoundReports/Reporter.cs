@@ -516,6 +516,29 @@
             {
                 Timing.RunCoroutine(TryUpload(reportData));
             }
+
+            // Broadcast
+            Log.Debug("Sending broadcasts.");
+            try
+            {
+                List<EBroadcast> brList = MainPlugin.Singleton.Config.EndingBroadcasts;
+                if (brList is not null && brList.Count > 0 && !MainPlugin.IsRestarting)
+                {
+                    if (brList.Any(br => br.Show))
+                        Map.ClearBroadcasts();
+
+                    foreach (EBroadcast br in brList)
+                    {
+                        br.Content = ProcessReportArgs(br.Content);
+                        Log.Debug($"Queueing broadcast: {br.Content}");
+                        Map.Broadcast(br);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Exception when showing round-end broadcasts: {e}");
+            }
         }
 
         /// <summary>
@@ -670,29 +693,6 @@
                         }
 
                         ListPool<EmbedField>.Pool.Return(fields);
-                    }
-
-                    // Broadcast
-                    Log.Debug("Sending broadcasts.");
-                    try
-                    {
-                        List<EBroadcast> brList = MainPlugin.Singleton.Config.EndingBroadcasts;
-                        if (brList is not null && brList.Count > 0 && !MainPlugin.IsRestarting)
-                        {
-                            if (brList.Any(br => br.Show))
-                                Map.ClearBroadcasts();
-
-                            foreach (EBroadcast br in brList)
-                            {
-                                br.Content = ProcessReportArgs(br.Content);
-                                Log.Debug($"Queueing broadcast: {br.Content}");
-                                Map.Broadcast(br);
-                            }
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Error($"Exception when showing round-end broadcasts: {e}");
                     }
 
                     Timing.CallDelayed(2f, Kill);
