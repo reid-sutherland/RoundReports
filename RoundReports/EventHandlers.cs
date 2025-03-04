@@ -329,6 +329,7 @@
             if (MainPlugin.Reporter is null)
                 return;
 
+            Log.Debug("Round has started");
             Timing.CallDelayed(.5f, () =>
             {
                 StartingStats stats = new()
@@ -339,6 +340,7 @@
                     Scientists = Player.Get(RoleTypeId.Scientist).Count(player => ECheck(player)),
                     StartTime = DateTime.Now,
                     PlayersAtStart = Player.List.Where(r => r.IsValidRole()).Count(player => ECheck(player)),
+                    Players = new(),
                 };
                 foreach (Player player in Player.List.Where(player => ECheck(player) && player.IsValidRole()))
                     stats.Players.Add($"{Reporter.GetDisplay(player, typeof(Player))} [{GetRole(player)}]");
@@ -352,7 +354,7 @@
         /// </summary>
         public void OnRestarting()
         {
-            Log.Debug("OnRestarting: Round is restarting");
+            Log.Debug("Round is restarting");
             MainPlugin.IsRestarting = true;
             if (MainPlugin.Reporter is not null && !MainPlugin.Reporter.HasSent && !FinalStatsFilledOut)
             {
