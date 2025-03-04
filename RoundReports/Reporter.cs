@@ -508,11 +508,14 @@
             yield return Timing.WaitForSeconds(0.5f);
             PasteEntry reportData = BuildReport();
 
+            // Save to file
             TryWriteToFile(reportData);
 
-            // TODO: Upload it to something that works or just remove Upload
-            Log.Debug("Report upload request received, step: 4.");
-            Timing.RunCoroutine(TryUpload(reportData));
+            // Upload paste
+            if (MainPlugin.Configs.PasteEnabled)
+            {
+                Timing.RunCoroutine(TryUpload(reportData));
+            }
         }
 
         /// <summary>
@@ -588,7 +591,7 @@
                     if (MainPlugin.Singleton.Config.SendInConsole)
                         Log.Info($"Report uploaded successfully! Access it here: {response.Link}");
 
-                    if (!MainPlugin.Singleton.Config.DiscordWebhooks.IsEmpty())
+                    if (MainPlugin.Configs.DiscordEnabled && !MainPlugin.Configs.DiscordWebhooks.IsEmpty())
                     {
                         Log.Debug("Sending report to Discord.");
                         Log.Debug("Building webhook information.");

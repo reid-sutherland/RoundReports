@@ -17,6 +17,12 @@
         [Description("Whether or not to show debug logs.")]
         public bool Debug { get; set; } = false;
 
+        [Description("Whether or not pastes should be automatically uploaded.")]
+        public bool PasteEnabled { get; set; } = true;
+
+        [Description("Whether or not discord webhook should be automatically used.")]
+        public bool DiscordEnabled { get; set; } = true;
+
         [Description("Your Paste.ee key. Get this from https://paste.ee/account/api after creating a paste.ee account. The plugin cannot function without a valid Pastee key!")]
         public string PasteKey { get; set; } = string.Empty;
 
