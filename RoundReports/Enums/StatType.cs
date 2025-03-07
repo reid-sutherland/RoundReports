@@ -36,7 +36,8 @@
         UIUKills,
         TutorialKills,
         SurvivingPlayers,
-        MostTalkativePlayer,
+        MostTalkativeHumanPlayer,
+        MostTalkativeScpPlayer,
         TotalInteractions,
 
         //-- Warhead

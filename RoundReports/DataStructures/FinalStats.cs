@@ -75,9 +75,13 @@
         [BindStat(StatType.SurvivingPlayers)]
         public List<string> SurvivingPlayers { get; set; }
 
-        [Translation(nameof(Translation.MostTalkativePlayer))]
-        [BindStat(StatType.MostTalkativePlayer)]
-        public string MostTalkativePlayer { get; set; }
+        [Translation(nameof(Translation.MostTalkativeHumanPlayer))]
+        [BindStat(StatType.MostTalkativeHumanPlayer)]
+        public string MostTalkativeHumanPlayer { get; set; }
+
+        [Translation(nameof(Translation.MostTalkativeScpPlayer))]
+        [BindStat(StatType.MostTalkativeScpPlayer)]
+        public string MostTalkativeScpPlayer { get; set; }
 
         [Translation(nameof(Translation.TotalInteractions))]
         [BindStat(StatType.TotalInteractions)]
@@ -158,17 +162,33 @@
             foreach (Player player in Player.Get(plr => plr.IsAlive && EventHandlers.ECheck(plr)))
                 SurvivingPlayers.Add($"{Reporter.GetDisplay(player, typeof(Player))} ({EventHandlers.GetRole(player)})");
 
-            // Give this a default value up front in case there are nulls
-            MostTalkativePlayer = "Dedicated Server (420ms)";
+            MostTalkativeHumanPlayer = string.Empty;
+            MostTalkativeScpPlayer = string.Empty;
 
-            KeyValuePair<Player, float>? talker = MainPlugin.Handlers.Talkers.OrderByDescending(r => r.Value).FirstOrDefault();
-            if (talker is not null && talker.HasValue)
+            List<KeyValuePair<Player, float>> talkers = MainPlugin.Handlers.Talkers.OrderByDescending(r => r.Value).ToList();
+            if (!talkers.IsEmpty())
             {
-                // if nobody talked then Key (Player) will be null and throw an exception
-                if (talker.Value.Key is not null)
+                foreach (KeyValuePair<Player, float> talker in talkers)
                 {
-                    MostTalkativePlayer = $"{talker.Value.Key.Nickname} ({Reporter.GetDisplay(TimeSpan.FromSeconds(talker.Value.Value))})";
+                    if (talker.Key.IsHuman && string.IsNullOrEmpty(MostTalkativeHumanPlayer))
+                    {
+                        MostTalkativeHumanPlayer = $"{talker.Key.Nickname} ({Reporter.GetDisplay(TimeSpan.FromSeconds(talker.Value))})";
+                    }
+                    else if (talker.Key.IsScp && string.IsNullOrEmpty(MostTalkativeScpPlayer))
+                    {
+                        MostTalkativeScpPlayer = $"{talker.Key.Nickname} ({Reporter.GetDisplay(TimeSpan.FromSeconds(talker.Value))})";
+                    }
+
+                    if (!string.IsNullOrEmpty(MostTalkativeHumanPlayer) && !string.IsNullOrEmpty(MostTalkativeScpPlayer))
+                    {
+                        break;
+                    }
                 }
+            }
+            else
+            {
+                MostTalkativeHumanPlayer = "Dedicated Server (420ms)";
+                MostTalkativeScpPlayer = "Dedicated Server (420ms)";
             }
         }
     }
