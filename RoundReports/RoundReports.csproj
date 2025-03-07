@@ -1,45 +1,51 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <OutputType>Library</OutputType>
-        <AssemblyName>$(ProjectName)</AssemblyName>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
-        <Version>7.1.0</Version>
-        <LangVersion>default</LangVersion>
-        <AssemblyVersion>7.0.6</AssemblyVersion>
-        <FileVersion>7.0.6</FileVersion>
-        <Nullable>disable</Nullable>
-        <RunPostBuildEvent>Always</RunPostBuildEvent>
-        <Authors>Reidobandito</Authors>
-    </PropertyGroup>
-	
-	<!-- Configure output folder for dlls -->
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Copy SourceFiles="$(ProjectDir)bin\Debug\RoundReports.dll" DestinationFolder="$(EXILED_PLUGINS_OUTPUT)" SkipUnchangedFiles="false" />
-	</Target>
-	
-	<Import Project="../Plugin.props" />
-  
-    <ItemGroup>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>$(ProjectName)</_Parameter1>
-        </AssemblyAttribute>
-    </ItemGroup>
 
-    <ItemGroup>
-        <PackageReference Include="ExMod.Exiled" Version="9.1.1" />
-        <PackageReference Include="Lib.Harmony" Version="2.3.5" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    </ItemGroup>
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <AssemblyName>$(ProjectName)</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <LangVersion>default</LangVersion>
+    <AssemblyVersion>7.0.6</AssemblyVersion>
+    <FileVersion>7.0.6</FileVersion>
+    <Nullable>disable</Nullable>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <Reference Include="Assembly-CSharp-firstpass" HintPath="$(EXILED_REFERENCES)\Assembly-CSharp-firstpass.dll" Private="false" />
-        <Reference Include="Mirror" HintPath="$(EXILED_REFERENCES)\Mirror.dll" Private="false" />
-        <Reference Include="UnityEngine" HintPath="$(EXILED_REFERENCES)\UnityEngine.dll" Private="false" />
-        <Reference Include="UnityEngine.CoreModule" HintPath="$(EXILED_REFERENCES)\UnityEngine.CoreModule.dll" Private="false" />
-        <Reference Include="UnityEngine.PhysicsModule" HintPath="$(EXILED_REFERENCES)\UnityEngine.PhysicsModule.dll" Private="false" />
-		<Reference Include="UnityEngine.UnityWebRequestModule" HintPath="$(EXILED_REFERENCES)\UnityEngine.UnityWebRequestModule.dll" Private="false" />
-        <Reference Include="YamlDotNet" HintPath="$(EXILED_REFERENCES)\YamlDotNet.dll" Private="false" />
-    </ItemGroup>
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>$(ProjectName)</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+	
+  <!-- Configure output folder for dlls -->
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Copy SourceFiles="$(ProjectDir)bin\Debug\RoundReports.dll" DestinationFolder="$(EXILED_PLUGINS_OUTPUT)" SkipUnchangedFiles="false" />
+  </Target>
+
+  <Import Project="../Plugin.props" />
+
+  <!-- All Exiled plugins should use these packages -->
+  <ItemGroup>
+    <PackageReference Include="ExMod.Exiled" Version="9.1.1" />
+    <PackageReference Include="Lib.Harmony" Version="2.3.5" />
+    <PackageReference Include="StyleCop.Analyzers" Version="$(StyleCopVersion)" IncludeAssets="All" PrivateAssets="All" />
+    <!-- See .editorconfig for custom StyleCop rules -->
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp-firstpass" HintPath="$(EXILED_REFERENCES)\Assembly-CSharp-firstpass.dll" Private="false" />
+    <Reference Include="Mirror" HintPath="$(EXILED_REFERENCES)\Mirror.dll" Private="false" />
+    <Reference Include="UnityEngine" HintPath="$(EXILED_REFERENCES)\UnityEngine.dll" Private="false" />
+    <Reference Include="UnityEngine.CoreModule" HintPath="$(EXILED_REFERENCES)\UnityEngine.CoreModule.dll" Private="false" />
+    <Reference Include="UnityEngine.PhysicsModule" HintPath="$(EXILED_REFERENCES)\UnityEngine.PhysicsModule.dll" Private="false" />
+    <Reference Include="UnityEngine.UnityWebRequestModule" HintPath="$(EXILED_REFERENCES)\UnityEngine.UnityWebRequestModule.dll" Private="false" />
+    <Reference Include="YamlDotNet" HintPath="$(EXILED_REFERENCES)\YamlDotNet.dll" Private="false" />
+  </ItemGroup>
+
 </Project>

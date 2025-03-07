@@ -27,9 +27,9 @@
 
         public int Escaped { get; set; } = 5;
 
-        public int ClassDCuffedEscape{ get; set; } = 0;
+        public int ClassDCuffedEscape { get; set; } = 0;
 
-        public int CuffedEscape{ get; set; } = -5;
+        public int CuffedEscape { get; set; } = -5;
 
         public int Scp079LeveledUp { get; set; } = 5;
 

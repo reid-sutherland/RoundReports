@@ -91,6 +91,7 @@
         public string SurvivingPlayers { get; set; } = "Surviving Players";
 
         public string MostTalkativeHumanPlayer { get; set; } = "Most Talkative Human";
+
         public string MostTalkativeScpPlayer { get; set; } = "Most Talkative SCP";
 
         public string TotalInteractions { get; set; } = "Total Interactions";
