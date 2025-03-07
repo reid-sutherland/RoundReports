@@ -106,7 +106,7 @@
 
         [Translation(nameof(Translation.DetonationTime))]
         [BindStat(StatType.DetonationTime)]
-        public DateTime DetonationTime { get; set; } = DateTime.MinValue;
+        public TimeSpan DetonationTime { get; set; }
 
         [Header(nameof(Translation.DoorStatsTitle))]
         [Translation(nameof(Translation.DoorsOpened))]

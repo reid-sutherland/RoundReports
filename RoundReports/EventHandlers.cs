@@ -1194,7 +1194,7 @@
             if (!stats.Detonated)
             {
                 stats.Detonated = true;
-                stats.DetonationTime = DateTime.Now;
+                stats.DetonationTime = Round.ElapsedTime;
             }
 
             Hold(stats);
