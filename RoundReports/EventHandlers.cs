@@ -1083,8 +1083,8 @@
                 MainPlugin.Reporter.AddRemark(escapeText);
                 IncrementPoints(ev.Player, MvpSettings.Points.Escaped, MainPlugin.Translations.Escaped);
                 return;
-            }            
-            
+            }
+
             IncrementPoints(ev.Player, MvpSettings.Points.Escaped, MainPlugin.Translations.Escaped);
         }
 

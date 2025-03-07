@@ -2,7 +2,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <PropertyGroup Condition="$(BaseProperties) == '' OR $(BaseProperties) == 'true'">
-    <Authors>Exmod-Team</Authors>
+    <Authors>DeadServer-Team</Authors>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(BuildProperties) == '' OR $(BuildProperties) == 'true'">
@@ -10,10 +10,7 @@
     <LangVersion>10.0</LangVersion>
     <PlatformTarget>x64</PlatformTarget>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <OutputPath>../bin\$(Configuration)\</OutputPath>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-
   </PropertyGroup>
 
   <PropertyGroup>
@@ -22,8 +19,7 @@
     <!-- Enables public beta warning via the PUBLIC_BETA constant -->
     <PublicBeta>false</PublicBeta>
 
-	<HarmonyVersion>2.2.2</HarmonyVersion>
-    <StyleCopVersion>1.1.118</StyleCopVersion>
+    <HarmonyVersion>2.2.2</HarmonyVersion>
     <SemanticVersioningVersion>1.3.0</SemanticVersioningVersion>
 
     <RepositoryType>Git</RepositoryType>
@@ -32,18 +28,13 @@
     <DefineConstants Condition="$(PublicBeta) == 'true'">$(DefineConstants);PUBLIC_BETA</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
-    <DebugType>Portable</DebugType>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
 
-  <!-- Disable warning about disabled generation of xml files on debug build -->
-  <PropertyGroup>
-    <NoWarn>$(NoWarn);SA0001</NoWarn>
-    <NoWarn>$(NoWarn);SA1000</NoWarn>
-    <NoWarn>$(NoWarn);SA1520</NoWarn>
-    <NoWarn>$(NoWarn);SA1009</NoWarn>
-    <NoWarn>$(NoWarn);SA1002</NoWarn>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>Portable</DebugType>
   </PropertyGroup>
 
 </Project>

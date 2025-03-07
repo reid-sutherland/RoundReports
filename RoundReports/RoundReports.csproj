@@ -16,7 +16,7 @@
 	
 	<!-- Configure output folder for dlls -->
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Copy SourceFiles="$(ProjectDir)..\bin\Debug\RoundReports.dll" DestinationFolder="$(EXILED_PLUGINS_OUTPUT)" SkipUnchangedFiles="false" />
+		<Copy SourceFiles="$(ProjectDir)bin\Debug\RoundReports.dll" DestinationFolder="$(EXILED_PLUGINS_OUTPUT)" SkipUnchangedFiles="false" />
 	</Target>
 	
 	<Import Project="../Plugin.props" />
@@ -31,7 +31,6 @@
         <PackageReference Include="ExMod.Exiled" Version="9.1.1" />
         <PackageReference Include="Lib.Harmony" Version="2.3.5" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-        <PackageReference Include="StyleCop.Analyzers" Version="$(StyleCopVersion)" IncludeAssets="All" PrivateAssets="All" />
     </ItemGroup>
 
     <ItemGroup>
