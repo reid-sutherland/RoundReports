@@ -508,9 +508,6 @@
             yield return Timing.WaitForSeconds(0.5f);
             PasteEntry reportData = BuildReport();
 
-            // Save to file
-            TryWriteToFile(reportData);
-
             // Upload paste
             if (MainPlugin.Configs.PasteEnabled)
             {
@@ -538,27 +535,6 @@
             catch (Exception e)
             {
                 Log.Error($"Exception when showing round-end broadcasts: {e}");
-            }
-        }
-
-        /// <summary>
-        /// Simple method to write the report to a file.
-        /// </summary>
-        private void TryWriteToFile(PasteEntry data)
-        {
-            // TOOD: Replace this with a dynamic server path
-            string filepath = "C:\\Users\\Reid\\Desktop\\SCPServer\\ROUND_REPORT.txt";
-            Log.Info($"Writing round report to file: {filepath}");
-            try
-            {
-                // TODO: Fix the formatting on serialize
-                //  - each "contents" section shows a bunch of ugly \r\n all on one line
-                //  - lots of "No data"s in the output, but i think that's just from testing
-                File.WriteAllText(filepath, JsonConvert.SerializeObject(data, Formatting.Indented));
-            }
-            catch (Exception ex)
-            {
-                Log.Error($"Error occurred writing report to file: {ex}");
             }
         }
 
