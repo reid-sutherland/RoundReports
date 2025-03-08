@@ -23,9 +23,9 @@
 
         public int HurtScp { get; set; } = 5;
 
-        public int KillScp { get; set; } = 4;
-
         public int RecontainScp079 { get; set; } = 4;
+
+        public int KillScp { get; set; } = 3;
 
         public int OpenWarheadPanel { get; set; } = 2;
 

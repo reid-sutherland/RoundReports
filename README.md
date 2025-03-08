@@ -65,8 +65,8 @@ Full list of actions and the default points they grant or remove below (can be c
 |---------------------------------------|------------------|
 | Escape                                | +5               |
 | Significantly Hurt SCP                | +5\*             |
-| Kill SCP                              | +4               |
 | Recontain SCP-079                     | +4               |
+| Kill SCP                              | +3               |
 | Kill Enemy (Scientist)                | +3               |
 | Kill Enemy (Not Scientist)            | +2               |
 | Open Warhead Panel (Surface)          | +2               |
