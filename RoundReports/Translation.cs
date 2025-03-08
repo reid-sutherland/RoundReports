@@ -295,11 +295,11 @@
 
         public string HumanMVP { get; set; } = "Human MVP";
 
-        public string SCPMVP { get; set; } = "SCP MVP";
+        public string ScpMVP { get; set; } = "SCP MVP";
 
         public string HumanPoints { get; set; } = "Human Points";
 
-        public string SCPPoints { get; set; } = "SCP Points";
+        public string ScpPoints { get; set; } = "SCP Points";
 
         // Remarks
         public string HiddenUsersNotice { get; set; } = "[Notice] Due to server settings, some users and their statistics have been hidden from this report.";
@@ -321,6 +321,8 @@
 
         //-- Positive
         public string HurtSCP { get; set; } = "Significantly Hurt SCP";
+
+        public string KilledScp { get; set; } = "Killed SCP";
 
         public string KilledScientist { get; set; } = "Killed Scientist";
 

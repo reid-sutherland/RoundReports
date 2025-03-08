@@ -11,47 +11,52 @@
         [Description("The amount of damage required to be dealt to an SCP before the 'hurt_scp' points are added.")]
         public int HurtScpRequired { get; set; } = 600;
 
-        // Add points
-        [Description("Stats to add points.")]
-        public int HurtScp { get; set; } = 5;
+        // Shared Points
+        [Description("Points that can be awarded to any team.")]
+        public int KillScientist { get; set; } = 3;
 
         public int KillEnemy { get; set; } = 2;
 
-        public int KillScientist { get; set; } = 3;
+        // Human Points
+        [Description("Points awarded to Humans.")]
+        public int Escaped { get; set; } = 5;
+
+        public int HurtScp { get; set; } = 5;
+
+        public int KillScp { get; set; } = 4;
+
+        public int RecontainScp079 { get; set; } = 4;
 
         public int OpenWarheadPanel { get; set; } = 2;
 
         public int UnlockGenerator { get; set; } = 1;
 
-        public int RecontainScp079 { get; set; } = 3;
-
-        public int Escaped { get; set; } = 5;
-
         public int ClassDCuffedEscape { get; set; } = 0;
 
-        public int CuffedEscape { get; set; } = -5;
+        public int CuffedEscape { get; set; } = -1;
+
+        public int Died { get; set; } = -1;
+
+        public int DiedDumb { get; set; } = -2;
+
+        public int Took3Candies { get; set; } = -10;
+
+        public int KillTeammate { get; set; } = -10;
+
+        // SCP Points
+        [Description("Points awarded to SCPs.")]
 
         public int Scp079LeveledUp { get; set; } = 5;
 
         public int Scp079TeslaKill { get; set; } = 5;
 
-        public int Scp079AssistKill { get; set; } = 1;
-
         public int Scp079OpenGate { get; set; } = 2;
 
         public int Scp079OpenKeycardDoor { get; set; } = 1;
 
+        public int Scp079AssistKill { get; set; } = 1;
+
         public int Scp106GrabPlayer { get; set; } = 1;
-
-        // Remove points
-        [Description("Stats to remove points.")]
-        public int KillTeammate { get; set; } = -10;
-
-        public int Took3Candies { get; set; } = -10;
-
-        public int Died { get; set; } = -1;
-
-        public int DiedDumb { get; set; } = -2;
 
         public int ScpDied { get; set; } = -5;
 

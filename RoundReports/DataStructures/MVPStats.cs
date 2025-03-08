@@ -16,7 +16,7 @@
         [BindStat(StatType.HumanMVP)]
         public string HumanMVP { get; set; }
 
-        [Translation(nameof(Translation.SCPMVP))]
+        [Translation(nameof(Translation.ScpMVP))]
         [BindStat(StatType.SCPMVP)]
         public string SCPMVP { get; set; }
 
@@ -24,7 +24,7 @@
         [BindStat(StatType.HumanPoints)]
         public Dictionary<Player, int> HumanPoints { get; set; } // Assigned in code
 
-        [Translation(nameof(Translation.SCPPoints))]
+        [Translation(nameof(Translation.ScpPoints))]
         [BindStat(StatType.SCPPoints)]
         public Dictionary<Player, int> SCPPoints { get; set; } // Assigned in code
 

@@ -570,12 +570,20 @@
                 }
 
                 // Killer points
-                if (ev.Player.Role.Side == ev.Attacker.Role.Side && ev.DamageHandler.Type != DamageType.Scp018)
-                    IncrementPoints(ev.Attacker, MvpSettings.Points.KillTeammate, MainPlugin.Translations.KilledTeammate); // Kill teammate
-                else if (GetTeam(ev.Player) is CustomTeam.Scientists)
-                    IncrementPoints(ev.Attacker, MvpSettings.Points.KillScientist, MainPlugin.Translations.KilledScientist); // Kill scientist
+                if (ev.Player.Role.Side == ev.Attacker.Role.Side)
+                {
+                    if (ev.DamageHandler.Type != DamageType.Scp018) // Don't penalize for ball kills
+                        IncrementPoints(ev.Attacker, MvpSettings.Points.KillTeammate, MainPlugin.Translations.KilledTeammate); // Kill teammate
+                }
                 else
-                    IncrementPoints(ev.Attacker, MvpSettings.Points.KillEnemy, MainPlugin.Translations.KilledEnemy); // Other kills
+                {
+                    if (GetTeam(ev.Player) is CustomTeam.Scientists)
+                        IncrementPoints(ev.Attacker, MvpSettings.Points.KillScientist, MainPlugin.Translations.KilledScientist); // Kill scientist
+                    else if (GetTeam(ev.Player) is CustomTeam.SCPs)
+                        IncrementPoints(ev.Attacker, MvpSettings.Points.KillScp, MainPlugin.Translations.KilledScp); // Kill SCP
+                    else
+                        IncrementPoints(ev.Attacker, MvpSettings.Points.KillEnemy, MainPlugin.Translations.KilledEnemy); // Other kills
+                }
 
                 // Grant points to SCP-079 if death in a locked down/blackout room
                 if (GetTeam(ev.Attacker) is CustomTeam.SCPs || ev.DamageHandler.Type == DamageType.CardiacArrest)
