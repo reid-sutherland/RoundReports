@@ -1268,27 +1268,25 @@
 
                 var sortedHumanData = Points[PointTeam.Human].OrderByDescending(data => data.Value);
                 var sortedSCPData = Points[PointTeam.SCP].OrderByDescending(data => data.Value);
-#pragma warning disable SA1312 // Variable names should begin with lower-case letter
-                MVPStats MVPInfo = GetStat<MVPStats>();
-#pragma warning restore SA1312 // Variable names should begin with lower-case letter
+                MVPStats mvpInfo = GetStat<MVPStats>();
 
                 if (sortedHumanData.Count(data => data.Value > 0) >= 1)
                 {
                     KeyValuePair<Player, int>? mvp = sortedHumanData.FirstOrDefault(data => data.Value > 0);
                     if (mvp.HasValue)
-                        MVPInfo.HumanMVP = mvp.Value.Key.Nickname + $" ({mvp.Value.Value} points)";
+                        mvpInfo.HumanMVP = mvp.Value.Key.Nickname + $" ({mvp.Value.Value} points)";
                 }
 
                 if (sortedSCPData.Count(data => data.Value > 0) >= 1)
                 {
                     KeyValuePair<Player, int>? mvp = sortedSCPData.FirstOrDefault(data => data.Value > 0);
                     if (mvp.HasValue)
-                        MVPInfo.SCPMVP = mvp.Value.Key.Nickname + $" ({mvp.Value.Value} points)";
+                        mvpInfo.SCPMVP = mvp.Value.Key.Nickname + $" ({mvp.Value.Value} points)";
                 }
 
-                MVPInfo.HumanPoints = sortedHumanData.ToDictionary(kp => kp.Key, kp2 => kp2.Value);
-                MVPInfo.SCPPoints = sortedSCPData.ToDictionary(kp => kp.Key, kp2 => kp2.Value);
-                Hold(MVPInfo);
+                mvpInfo.HumanPoints = sortedHumanData.ToDictionary(kp => kp.Key, kp2 => kp2.Value);
+                mvpInfo.SCPPoints = sortedSCPData.ToDictionary(kp => kp.Key, kp2 => kp2.Value);
+                Hold(mvpInfo);
             }
         }
 

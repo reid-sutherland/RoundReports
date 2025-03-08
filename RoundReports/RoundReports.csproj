@@ -4,37 +4,23 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <AssemblyName>$(ProjectName)</AssemblyName>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
-    <LangVersion>default</LangVersion>
+    <RootNamespace>$(ProjectName)</RootNamespace>
     <AssemblyVersion>7.0.6</AssemblyVersion>
     <FileVersion>7.0.6</FileVersion>
     <Nullable>disable</Nullable>
-    <RunPostBuildEvent>Always</RunPostBuildEvent>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
-  <ItemGroup>
-    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-      <_Parameter1>$(ProjectName)</_Parameter1>
-    </AssemblyAttribute>
-  </ItemGroup>
-	
-  <!-- Configure output folder for dlls -->
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Copy SourceFiles="$(ProjectDir)bin\Debug\RoundReports.dll" DestinationFolder="$(EXILED_PLUGINS_OUTPUT)" SkipUnchangedFiles="false" />
-  </Target>
+  <PropertyGroup>
+    <RepositoryUrl>https://github.com/reid-sutherland/RoundReports</RepositoryUrl>
+  </PropertyGroup>
 
   <Import Project="../Plugin.props" />
 
-  <!-- All Exiled plugins should use these packages -->
   <ItemGroup>
-    <PackageReference Include="ExMod.Exiled" Version="9.1.1" />
+    <PackageReference Include="ExMod.Exiled" Version="9.5.0" />
     <PackageReference Include="Lib.Harmony" Version="2.3.5" />
     <PackageReference Include="StyleCop.Analyzers" Version="$(StyleCopVersion)" IncludeAssets="All" PrivateAssets="All" />
-    <!-- See .editorconfig for custom StyleCop rules -->
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
