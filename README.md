@@ -1,12 +1,20 @@
 
 # Round Reports
- An SCP:SL Exiled plugin which generates reports at the end of each round, and shares them in your Discord server. Also includes end-of-round broadcasts, with support for over 20 different round statistics displayed in these broadcasts.  This plugin supports Serpent's Hand and UIU Rescue Squad, and will display stats accordingly.
+
+An SCP:SL Exiled plugin which generates reports at the end of each round, and shares them in your Discord server. 
+Also includes end-of-round broadcasts, with support for over 20 different round statistics displayed in these broadcasts. 
+This plugin supports Serpent's Hand and UIU Rescue Squad, and will display stats accordingly.
   
-This plugin uses [paste.ee](https://paste.ee/) for hosting reports. This service is not affiliated with RoundReports, and they have their own Terms of Service you must abide by when using this plugin. By default, reports automatically expire after 30 days; however, this can be configured, and reports can be saved with a simple tool like the [Wayback Machine](https://web.archive.org/).  
+This plugin uses [paste.ee](https://paste.ee/) for hosting reports. 
+This service is not affiliated with RoundReports, and they have their own Terms of Service you must abide by when using this plugin. 
+By default, reports automatically expire after 30 days; however, this can be configured, and reports can be saved with a simple tool like the [Wayback Machine](https://web.archive.org/).  
   
 Important Notes:
 * This plugin requires **Newtonsoft.json** in your plugin's dependencies folder in order to work. Click [here](https://github.com/Thundermaker300/RoundReports/releases/download/v0.5.5/Newtonsoft.Json.dll) to download it.
 * Statistics from users with Do Not Track (DNT) enabled are treated differently, please see "Note on DNT Players" section below.
+
+## Credits
+Credit to the original author that I forked this repo from: [Thundermaker300](https://github.com/Thundermaker300/RoundReports)
 
 ## Supported Plugins
 * SCP-008-X (User must have "IsScp008" session variable)
@@ -41,23 +49,26 @@ Players with Do Not Track enabled will never have their username present on repo
 ## BUGS TO FIX
 
 These actions/events are not currently being reported properly
-- EventBroadcast (end-of-round messages have incorrect names for MVPs)
-- All starting statistics
-- Used item:
-  - SCP-500
-- More that I haven't found yet...
+- EventBroadcast (end-of-round messages have incorrect names for MVPs).
+- MostTalkativeHuman is sometimes empty after a round.
+- TotalTeslaGates (the Map statistic) is always zero.
+- SCP-018 throws are not recorded, the logic is in OnUsedItem but throwing the ball does not trigger this handler.
 
 ## MVP Statistic Info
-MVP is calculated by granting players points for specific actions. These points can also be taken away by other actions. There are two separate point systems, and as such two separate MVPs: One for SCPs, and one for humans. Full list of actions and the default points they grant or remove below (can be configured).
+MVP is calculated by granting players points for specific actions. These points can also be taken away by other actions. 
+There are two separate point systems, and as such two separate MVPs: One for SCPs, and one for humans. 
+Full list of actions and the default points they grant or remove below (can be configured).
 
 ### Human Points
 
 | **Action**                            | **Point Change** |
 |---------------------------------------|------------------|
-| Kill SCP                              | +10              |
 | Escape                                | +5               |
-| Kill Scientist                        | +3               |
-| Kill Player (Not Scientist)           | +2               |
+| Significantly Hurt SCP                | +5\*             |
+| Kill SCP                              | +4               |
+| Recontain SCP-079                     | +4               |
+| Kill Enemy (Scientist)                | +3               |
+| Kill Enemy (Not Scientist)            | +2               |
 | Open Warhead Panel (Surface)          | +2               |
 | Unlock Generator                      | +1               |
 | Escape (cuffed as Class-D)            | +0               |
@@ -74,16 +85,18 @@ MVP is calculated by granting players points for specific actions. These points 
 |---------------------------------------|------------------|
 | Level Up (SCP-079)                    | +5               |
 | Tesla Gate Kill (SCP-079)             | +5               |
-| Kill Scientist                        | +3               |
-| Kill Player (Not Scientist)           | +2               |
-| Open Door (SCP-079)                   | +0-2\*\*         |
-| Kill Assist (SCP-079)                 | +1\*             |
+| Kill Enemy (Scientist)                | +3               |
+| Kill Enemy (Not Scientist)            | +2               |
+| Open Gate (SCP-079)                   | +2\*\*           |
+| Open Door (SCP-079)                   | +1\*\*           |
+| Kill Assist (SCP-079)                 | +1\*\*\*         |
 | Capture Player (SCP-106)              | +1               |
 | Die (Most Causes)                     | -5               |
 | Die (Warhead, Decontamination, Tesla) | -10              |
 
-\*+1 for each player in a room that SCP-079 has blacked out/locked down. Does not include SCPs, Tutorials, and Serpent's Hand (if the plugin is installed).  
-\*\*+1 if the door is a keycard door and there is an SCP nearby. +2 for keycarded gate with SCP nearby.
+\*Awarded for dealing a configurable amount of damage to an SCP. Default damage value is 600.
+\*\* These require that the gate/door is keycarded and an SCP is nearby.
+\*\*\*+1 for each player in a room that SCP-079 has blacked out/locked down. Does not include SCPs, Tutorials, and Serpent's Hand (if the plugin is installed).  
 
  ## Stats
  Every stat below can be disabled in the config by adding its respective `key` to the `IgnoredStats` config (with the exception of stats denoted with a `*`). Some of the following stats can be used in end-of-round broadcasts, and the Discord embed footer config. Note that arguments must be surrounded by curly braces and capitalized (eg. `{HUMANMVP}`).
