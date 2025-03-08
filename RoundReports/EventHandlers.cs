@@ -765,7 +765,6 @@
             Hold(stats);
         }
 
-        // TODO: Find an event for this
         /// <summary>
         /// Called when a player damages a window.
         /// </summary>

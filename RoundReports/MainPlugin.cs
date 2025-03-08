@@ -139,8 +139,7 @@
             PlayerEvents.Shooting += Handlers.OnShooting;
             PlayerEvents.ReloadingWeapon += Handlers.OnReloadingWeapon;
             PlayerEvents.UnlockingGenerator += Handlers.OnUnlockingGenerator;
-            // TODO:
-            //PlayerEvents.PlayerDamageWindow += Handlers.OnDamagingWindow;
+            PlayerEvents.DamagingWindow += Handlers.OnDamagingWindow;
 
             Scp049Events.FinishingRecall += Handlers.OnScp049Recalling;
 
@@ -235,8 +234,7 @@
             PlayerEvents.Shooting -= Handlers.OnShooting;
             PlayerEvents.ReloadingWeapon -= Handlers.OnReloadingWeapon;
             PlayerEvents.UnlockingGenerator -= Handlers.OnUnlockingGenerator;
-            // TODO:
-            //PlayerEvents.PlayerDamageWindow -= Handlers.OnDamagingWindow;
+            PlayerEvents.DamagingWindow -= Handlers.OnDamagingWindow;
 
             Scp049Events.FinishingRecall -= Handlers.OnScp049Recalling;
 
