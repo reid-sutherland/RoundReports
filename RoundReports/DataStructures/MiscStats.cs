@@ -43,7 +43,9 @@
         [BindStat(StatType.TotalDoors)]
         public int TotalDoors { get; set; }
 
-        // Note: Removed TotalTeslaGates because it isn't working and nobody cares about it anyway
+        [Translation(nameof(Translation.TotalTeslaGates))]
+        [BindStat(StatType.TotalTeslaGates)]
+        public int TotalTeslaGates { get; set; }
 
         [Header(nameof(Translation.TeslaTitle))]
         [Translation(nameof(Translation.TeslaShocks))]

@@ -292,9 +292,7 @@
             stats.TotalCameras = Camera.List.Count();
             stats.TotalDoors = Door.List.Count();
             stats.TotalRooms = Room.List.Count();
-
-            // NOTE: removed this stat from MiscStats, it's bugged and always returns 0
-            //stats.TotalTeslaGates = TeslaGate.List.Count();
+            stats.TotalTeslaGates = TeslaGate.List.Count(); // TODO: this stat is always zero
 
             foreach (var room in Room.List)
             {
