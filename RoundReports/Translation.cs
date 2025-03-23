@@ -69,24 +69,7 @@
 
         public string TotalKills { get; set; } = "Total Kills";
 
-        public string ScpKills { get; set; } = "SCP Kills";
-
-        public string DClassKills { get; set; } = "Class-D Kills";
-
-        public string ScientistKills { get; set; } = "Scientist Kills";
-
-        public string MtfKills { get; set; } = "MTF Kills";
-
-        public string ChaosKills { get; set; } = "Chaos Kills";
-
-        [Description("This text will only be visible if the Serpents Hand plugin is also installed.")]
-        public string SerpentsHandKills { get; set; } = "Serpents Hand Kills";
-
-        [Description("This text will only be visible if the UIU plugin is also installed.")]
-        public string UiuKills { get; set; } = "UIU Kills";
-
-        [Description("This text will only be visible if at least one tutorial (not Serpents Hand or UIU) kills a player in the round.")]
-        public string TutorialKills { get; set; } = "Tutorial Kills";
+        public string KillsByTeam { get; set; } = "Kills By Team";
 
         public string SurvivingPlayers { get; set; } = "Surviving Players";
 
@@ -144,9 +127,9 @@
         // Organized Kill Stats
         public string OrganizedKillsTitle { get; set; } = "Kills";
 
-        public string KillsByPlayer { get; set; } = "Kills By Player";
-
         public string KillsbyType { get; set; } = "Kills By Type";
+
+        public string KillsByPlayer { get; set; } = "Kills By Player";
 
         public string KillsByZone { get; set; } = "Kills By Zone";
 
@@ -308,7 +291,7 @@
 
         public string EscapeRemark { get; set; } = "{PLAYER} [{ROLE}] was the first to escape ({MINUTE}m{SECOND}s)!";
 
-        public string KillRemark { get; set; } = "{PLAYER} [{ROLE}] killed first! They killed {TARGET} [{TARGETROLE}].";
+        public string KillRemark { get; set; } = "{PLAYER} [{ROLE}] killed first! They killed {TARGET} [{TARGETROLE}] via {DAMAGETYPE}.";
 
         public string UpgradeRemark { get; set; } = "The first item to be upgraded in SCP-914 was an {ITEM} on {MODE}.";
 
@@ -352,6 +335,8 @@
 
         //-- Negative
         public string Death { get; set; } = "Death";
+
+        public string DumbDeath { get; set; } = "DUMB Death";
 
         public string Took3Candies { get; set; } = "Took 3 Candies";
 

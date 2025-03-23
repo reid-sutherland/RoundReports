@@ -5,7 +5,6 @@
     /// </summary>
     public enum StatType
     {
-#pragma warning disable SA1602
         // Start Stats
         StartTime,
         StartClassD,
@@ -27,14 +26,7 @@
         RoundTime,
         TotalDeaths,
         TotalKills,
-        SCPKills,
-        DClassKills,
-        ScientistKills,
-        MTFKills,
-        ChaosKills,
-        SerpentsHandKills,
-        UIUKills,
-        TutorialKills,
+        KillsByTeam,
         SurvivingPlayers,
         MostTalkativeHumanPlayer,
         MostTalkativeScpPlayer,
@@ -125,8 +117,8 @@
         AllUpgrades,
 
         // Kill Stats
-        KillsByPlayer,
         KillsByType,
+        KillsByPlayer,
         KillsByZone,
         PlayerKills,
 
@@ -136,7 +128,5 @@
         AverageDamagePerPlayer,
         DamageByPlayer,
         DamageByType,
-
-#pragma warning restore SA1602
     }
 }

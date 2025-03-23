@@ -30,6 +30,7 @@
     using PlayerRoles.PlayableScps.Scp079.Cameras;
     using PlayerRoles.PlayableScps.Scp079.Rewards;
     using PlayerRoles.Voice;
+    using PluginAPI.Roles;
     using Scp914;
     using UnityEngine;
     using Camera = Exiled.API.Features.Camera;
@@ -140,9 +141,9 @@
             if (player is null)
                 return CustomTeam.Dead;
             if (player.SessionVariables.ContainsKey("IsSH"))
-                return CustomTeam.SH;
+                return CustomTeam.SerpentsHand;
             else if (player.SessionVariables.ContainsKey("IsUIU"))
-                return CustomTeam.UIU;
+                return CustomTeam.UIURescueSquad;
             else if (player.SessionVariables.ContainsKey("IsScp008"))
                 return CustomTeam.SCPs;
             else if (player.SessionVariables.ContainsKey("IsScp035"))
@@ -204,6 +205,50 @@
             => MainPlugin.Reporter?.GetStat<T>() ?? null;
 
         /// <summary>
+        /// Increments a value in a dictionary of integer stats.
+        /// </summary>
+        /// <param name="stat">The dictionary containing stats.</param>
+        /// <param name="key">The key indicating the stat within the dictionary to increment.</param>
+        /// <param name="value">How much to increment the stat by.</param>
+        public void IncrementDictStatInt<TKey>(Dictionary<TKey, int> stat, TKey key, int value)
+        {
+            if (stat.ContainsKey(key))
+                stat[key] += value;
+            else
+                stat.Add(key, value);
+        }
+
+        /// <summary>
+        /// Increments a value in a dictionary of float stats.
+        /// </summary>
+        /// <param name="stat">The dictionary containing stats.</param>
+        /// <param name="key">The key indicating the stat within the dictionary to increment.</param>
+        /// <param name="value">How much to increment the stat by.</param>
+        public void IncrementDictStatFloat<TKey>(Dictionary<TKey, float> stat, TKey key, float value)
+        {
+            if (stat.ContainsKey(key))
+                stat[key] += value;
+            else
+                stat.Add(key, value);
+        }
+
+        /// <summary>
+        /// Increments a value in a dictionary of PercentInt stats.
+        /// </summary>
+        /// <param name="stat">The dictionary containing stats.</param>
+        /// <param name="key">The key indicating the stat within the dictionary to increment.</param>
+        /// <param name="value">See GetPI().</param>
+        /// <param name="total">See GetPI().</param>
+        /// <param name="total">See GetPI().</param>
+        public void IncrementDictStatPercentInt<TKey>(Dictionary<TKey, PercentInt> stat, TKey key, int value, int total, Func<int> updater)
+        {
+            if (stat.ContainsKey(key))
+                stat[key].IncrementValue(value);
+            else
+                stat.Add(key, GetPI(value, total, updater));
+        }
+
+        /// <summary>
         /// Increments MVP points. Ignored if user: Is null, Is DNT, Is role Tutorial, IsValidRole = false, or is an ignored user.
         /// </summary>
         /// <param name="plr">Player.</param>
@@ -228,10 +273,7 @@
             if (!Points.ContainsKey(PT))
                 Points.Add(PT, new());
 
-            if (Points[PT].ContainsKey(plr))
-                Points[PT][plr] += amount;
-            else
-                Points[PT].Add(plr, amount);
+            IncrementDictStatInt(Points[PT], plr, amount);
 
             if (Points[PT].ContainsKey(plr))
             {
@@ -296,10 +338,7 @@
 
             foreach (var room in Room.List)
             {
-                if (!stats.RoomsByZone.ContainsKey(room.Zone))
-                    stats.RoomsByZone[room.Zone] = GetPI(1, stats.TotalRooms, () => MainPlugin.Reporter.GetStat<MiscStats>().TotalRooms);
-                else
-                    stats.RoomsByZone[room.Zone].IncrementValue(1);
+                IncrementDictStatPercentInt(stats.RoomsByZone, room.Zone, 1, stats.TotalRooms, () => MainPlugin.Reporter.GetStat<MiscStats>().TotalRooms);
             }
 
             Hold(stats);
@@ -329,7 +368,9 @@
             if (MainPlugin.Reporter is null)
                 return;
 
-            Log.Debug("Round has started");
+            Log.Info("Round has started");
+
+            // Set starting stats
             Timing.CallDelayed(.5f, () =>
             {
                 StartingStats stats = new()
@@ -429,7 +470,7 @@
         public void OnSpawned(SpawnedEventArgs ev)
         {
             if (!Round.InProgress || MainPlugin.IsRestarting || Round.ElapsedTime.TotalSeconds <= 30 || !ECheck(ev.Player)) return;
-            if (GetTeam(ev.Player) is CustomTeam.FoundationForces or CustomTeam.ChaosInsurgency or CustomTeam.SH or CustomTeam.UIU)
+            if (GetTeam(ev.Player) is CustomTeam.FoundationForces or CustomTeam.ChaosInsurgency or CustomTeam.SerpentsHand or CustomTeam.UIURescueSquad)
             {
                 MiscStats stats = GetStat<MiscStats>();
                 stats.TotalRespawned++;
@@ -456,28 +497,19 @@
                 stats.TotalDamage += amount;
 
                 // Check damage type
-                if (!stats.DamageByType.ContainsKey(ev.DamageHandler.Type))
-                    stats.DamageByType.Add(ev.DamageHandler.Type, GetPI(amount, stats.TotalDamage, () => MainPlugin.Reporter.GetStat<OrganizedDamageStats>().TotalDamage));
-                else
-                    stats.DamageByType[ev.DamageHandler.Type].IncrementValue(amount);
+                IncrementDictStatPercentInt(stats.DamageByType, ev.DamageHandler.Type, amount, stats.TotalDamage, () => MainPlugin.Reporter.GetStat<OrganizedDamageStats>().TotalDamage);
             }
 
             // Check Attacker
             if (ECheck(ev.Attacker))
             {
                 stats.PlayerDamage += amount;
-                if (!stats.DamageByPlayer.ContainsKey(ev.Attacker))
-                    stats.DamageByPlayer.Add(ev.Attacker, GetPI(amount, stats.TotalDamage, () => MainPlugin.Reporter.GetStat<OrganizedDamageStats>().TotalDamage));
-                else
-                    stats.DamageByPlayer[ev.Attacker].IncrementValue(amount);
+                IncrementDictStatPercentInt(stats.DamageByPlayer, ev.Attacker, amount, stats.TotalDamage, () => MainPlugin.Reporter.GetStat<OrganizedDamageStats>().TotalDamage);
 
                 // Grant Points for SCP damage
                 if (GetTeam(ev.Player) is CustomTeam.SCPs && GetRole(ev.Player) is not CustomRT.Scp0492 && GetTeam(ev.Attacker) is not CustomTeam.SCPs)
                 {
-                    if (DamageToScps.ContainsKey(ev.Attacker))
-                        DamageToScps[ev.Attacker] += amount;
-                    else
-                        DamageToScps.Add(ev.Attacker, amount);
+                    IncrementDictStatFloat(DamageToScps, ev.Attacker, amount);
 
                     if (DamageToScps[ev.Attacker] >= MvpSettings.Points.HurtScpRequired)
                     {
@@ -497,71 +529,41 @@
         public void OnDying(DyingEventArgs ev)
         {
             if (!Round.InProgress || !ev.IsAllowed || MainPlugin.IsRestarting || MainPlugin.Reporter is null) return;
+
             FinalStats stats = GetStat<FinalStats>();
             OrganizedKillsStats killStats = GetStat<OrganizedKillsStats>();
             stats.TotalDeaths++;
+
+            // Kills by type
+            IncrementDictStatInt(killStats.KillsByType, ev.DamageHandler.Type, 1);
+
             if (ev.Attacker is not null && ev.Player is not null)
             {
+                stats.TotalKills++;
+
+                // Update percentage stats
+                IncrementDictStatPercentInt(killStats.KillsByPlayer, ev.Attacker, 1, stats.TotalKills, () => MainPlugin.Reporter.GetStat<FinalStats>().TotalKills);
+                IncrementDictStatPercentInt(killStats.KillsByZone, ev.Player.Zone, 1, stats.TotalKills, () => MainPlugin.Reporter.GetStat<FinalStats>().TotalKills);
+                IncrementDictStatPercentInt(stats.KillsByTeam, GetTeam(ev.Attacker), 1, stats.TotalKills, () => MainPlugin.Reporter.GetStat<FinalStats>().TotalKills);
+
                 // Kill logs
+                string timestamp = Reporter.GetDisplay(Round.ElapsedTime);
+                string killerName = Reporter.GetDisplay(ev.Attacker, typeof(Player));
+                string dyingName = Reporter.GetDisplay(ev.Player, typeof(Player));
                 string killerRole = GetRole(ev.Attacker).ToString();
                 string dyingRole = GetRole(ev.Player).ToString();
-                killStats.PlayerKills.Insert(0, $"[{Reporter.GetDisplay(Round.ElapsedTime)}] {Reporter.GetDisplay(ev.Attacker, typeof(Player))} [{killerRole}] killed {Reporter.GetDisplay(ev.Player, typeof(Player))} [{dyingRole}]");
-
-                // Kill by player
-                if (!killStats.KillsByPlayer.ContainsKey(ev.Attacker))
-                    killStats.KillsByPlayer.Add(ev.Attacker, GetPI(1, stats.TotalKills, () => MainPlugin.Reporter.GetStat<FinalStats>().TotalKills));
-                else
-                    killStats.KillsByPlayer[ev.Attacker].IncrementValue(1);
-
-                // Kill by zone
-                if (killStats.KillsByZone.ContainsKey(ev.Player.Zone))
-                    killStats.KillsByZone[ev.Player.Zone].IncrementValue(1);
-                else
-                    killStats.KillsByZone.Add(ev.Player.Zone, GetPI(1, stats.TotalKills, () => MainPlugin.Reporter.GetStat<FinalStats>().TotalKills));
-
-                // Role kills
-                stats.TotalKills++;
-                if (GetTeam(ev.Attacker) is CustomTeam.UIU)
-                {
-                    stats.UIUKills++;
-                }
-                else if (GetTeam(ev.Attacker) is CustomTeam.SH)
-                {
-                    stats.SerpentsHandKills++;
-                }
-                else
-                {
-                    switch (ev.Attacker.Role.Team)
-                    {
-                        case Team.SCPs:
-                            stats.SCPKills++;
-                            break;
-                        case Team.ClassD:
-                            stats.DClassKills++;
-                            break;
-                        case Team.Scientists:
-                            stats.ScientistKills++;
-                            break;
-                        case Team.FoundationForces:
-                            stats.MTFKills++;
-                            break;
-                        case Team.ChaosInsurgency:
-                            stats.ChaosKills++;
-                            break;
-                        case Team.OtherAlive:
-                            stats.TutorialKills++;
-                            break;
-                    }
-                }
+                string damageType = ev.DamageHandler.Type.ToString();
+                killStats.PlayerKills.Insert(0, $"[{timestamp}] {killerName} [{killerRole}] killed {dyingName} [{dyingRole}] via {damageType}");
 
                 // First kill check
                 if (!FirstKill && MainPlugin.Reporter is not null && ECheck(ev.Attacker))
                 {
                     string killText = MainPlugin.Translations.KillRemark
-                        .Replace("{PLAYER}", Reporter.GetDisplay(ev.Attacker, typeof(Player)))
-                        .Replace("{ROLE}", GetRole(ev.Attacker).ToString())
-                        .Replace("{TARGET}", Reporter.GetDisplay(ev.Player, typeof(Player)))
-                        .Replace("{TARGETROLE}", dyingRole);
+                        .Replace("{PLAYER}", killerName)
+                        .Replace("{ROLE}", killerRole)
+                        .Replace("{TARGET}", dyingName)
+                        .Replace("{TARGETROLE}", dyingRole)
+                        .Replace("{DAMAGETYPE}", damageType);
                     MainPlugin.Reporter.AddRemark(killText);
                     FirstKill = true;
                 }
@@ -576,7 +578,7 @@
                 {
                     if (GetTeam(ev.Player) is CustomTeam.Scientists)
                         IncrementPoints(ev.Attacker, MvpSettings.Points.KillScientist, MainPlugin.Translations.KilledScientist); // Kill scientist
-                    else if (GetTeam(ev.Player) is CustomTeam.SCPs)
+                    else if (GetTeam(ev.Player) is CustomTeam.SCPs && GetRole(ev.Player) is not CustomRT.Scp0492)
                         IncrementPoints(ev.Attacker, MvpSettings.Points.KillScp, MainPlugin.Translations.KilledScp); // Kill SCP
                     else
                         IncrementPoints(ev.Attacker, MvpSettings.Points.KillEnemy, MainPlugin.Translations.KilledEnemy); // Other kills
@@ -603,19 +605,14 @@
                 }
             }
 
-            // Kill by type
-            if (!killStats.KillsByType.ContainsKey(ev.DamageHandler.Type))
-                killStats.KillsByType.Add(ev.DamageHandler.Type, 1);
-            else
-                killStats.KillsByType[ev.DamageHandler.Type]++;
-            Hold(killStats);
-            Hold(stats);
-
-            // Target Points
+            // Death Points
             if (ev.DamageHandler.Type is DamageType.Warhead or DamageType.Decontamination or DamageType.Tesla or DamageType.Crushed or DamageType.Falldown)
-                IncrementPoints(ev.Player, ev.Player.IsScp && ev.Player.Role != RoleTypeId.Scp0492 ? MvpSettings.Points.ScpDiedDumb : MvpSettings.Points.DiedDumb, MainPlugin.Translations.Death); // Dumb causes
+                IncrementPoints(ev.Player, ev.Player.IsScp && ev.Player.Role != RoleTypeId.Scp0492 ? MvpSettings.Points.ScpDiedDumb : MvpSettings.Points.DiedDumb, MainPlugin.Translations.DumbDeath); // Dumb causes
             else
                 IncrementPoints(ev.Player, ev.Player.IsScp && ev.Player.Role != RoleTypeId.Scp0492 ? MvpSettings.Points.ScpDied : MvpSettings.Points.Died, MainPlugin.Translations.Death); // Other causes
+
+            Hold(stats);
+            Hold(killStats);
         }
 
         /// <summary>
@@ -628,16 +625,8 @@
                 return;
             ItemStats stats = GetStat<ItemStats>();
             stats.TotalDrops++;
-
-            if (stats.Drops.ContainsKey(ev.Item.Type))
-                stats.Drops[ev.Item.Type].IncrementValue(1);
-            else
-                stats.Drops[ev.Item.Type] = GetPI(1, stats.TotalDrops, () => MainPlugin.Reporter.GetStat<ItemStats>().TotalDrops);
-
-            if (stats.PlayerDrops.ContainsKey(ev.Player))
-                stats.PlayerDrops[ev.Player].IncrementValue(1);
-            else
-                stats.PlayerDrops[ev.Player] = GetPI(1, stats.TotalDrops, () => MainPlugin.Reporter.GetStat<ItemStats>().TotalDrops);
+            IncrementDictStatPercentInt(stats.Drops, ev.Item.Type, 1, stats.TotalDrops, () => MainPlugin.Reporter.GetStat<ItemStats>().TotalDrops);
+            IncrementDictStatPercentInt(stats.PlayerDrops, ev.Player, 1, stats.TotalDrops, () => MainPlugin.Reporter.GetStat<ItemStats>().TotalDrops);
             Hold(stats);
         }
 
@@ -668,10 +657,7 @@
         {
             if (!Round.InProgress || !ev.IsAllowed || !ECheck(ev.Player) || ev.Player.Role.Type is RoleTypeId.Overwatch) return;
 
-            if (!Talkers.ContainsKey(ev.Player))
-                Talkers.Add(ev.Player, Time.deltaTime);
-            else
-                Talkers[ev.Player] += Time.deltaTime;
+            IncrementDictStatFloat(Talkers, ev.Player, Time.deltaTime);
         }
 
         /// <summary>
@@ -688,14 +674,7 @@
             Firearm firearm = (Firearm)ev.Player.CurrentItem;
             if (firearm is not null)
             {
-                if (!stats.ShotsByFirearm.ContainsKey(firearm.FirearmType))
-                {
-                    stats.ShotsByFirearm[firearm.FirearmType] = GetPI(1, stats.TotalShotsFired, () => MainPlugin.Reporter.GetStat<ItemStats>().TotalShotsFired);
-                }
-                else
-                {
-                    stats.ShotsByFirearm[firearm.FirearmType].IncrementValue(1);
-                }
+                IncrementDictStatPercentInt(stats.ShotsByFirearm, firearm.FirearmType, 1, stats.TotalShotsFired, () => MainPlugin.Reporter.GetStat<ItemStats>().TotalShotsFired);
             }
 
             Hold(stats);
@@ -967,18 +946,12 @@
             if (ev.Door.IsOpen)
             {
                 stats.DoorsClosed++;
-                if (stats.PlayerDoorsClosed.ContainsKey(ev.Player))
-                    stats.PlayerDoorsClosed[ev.Player].IncrementValue(1);
-                else
-                    stats.PlayerDoorsClosed.Add(ev.Player, GetPI(1, stats.DoorsClosed, () => MainPlugin.Reporter.GetStat<FinalStats>().DoorsClosed));
+                IncrementDictStatPercentInt(stats.PlayerDoorsClosed, ev.Player, 1, stats.DoorsClosed, () => MainPlugin.Reporter.GetStat<FinalStats>().DoorsClosed);
             }
             else
             {
                 stats.DoorsOpened++;
-                if (stats.PlayerDoorsOpened.ContainsKey(ev.Player))
-                    stats.PlayerDoorsOpened[ev.Player].IncrementValue(1);
-                else
-                    stats.PlayerDoorsOpened.Add(ev.Player, GetPI(1, stats.DoorsOpened, () => MainPlugin.Reporter.GetStat<FinalStats>().DoorsOpened));
+                IncrementDictStatPercentInt(stats.PlayerDoorsOpened, ev.Player, 1, stats.DoorsOpened, () => MainPlugin.Reporter.GetStat<FinalStats>().DoorsOpened);
 
                 if (!FirstDoor && ev.Player is not null && MainPlugin.Reporter is not null)
                 {
@@ -1036,11 +1009,10 @@
                 stats.FirstUser = ev.Player;
             }
 
+            // Candies Taken
             stats.TotalCandiesTaken++;
-            if (!stats.CandiesByPlayer.ContainsKey(ev.Player))
-                stats.CandiesByPlayer.Add(ev.Player, 1);
-            else
-                stats.CandiesByPlayer[ev.Player]++;
+            IncrementDictStatInt(stats.CandiesByPlayer, ev.Player, 1);
+            IncrementDictStatInt(stats.CandiesTaken, ev.Candy, 1);
 
             // Hands
             if (ev.ShouldSever)
@@ -1049,11 +1021,6 @@
                 IncrementPoints(ev.Player, MvpSettings.Points.Took3Candies, MainPlugin.Translations.Took3Candies);
             }
 
-            // Candies Taken
-            if (!stats.CandiesTaken.ContainsKey(ev.Candy))
-                stats.CandiesTaken.Add(ev.Candy, 1);
-            else
-                stats.CandiesTaken[ev.Candy]++;
             Hold(stats);
             Interactions++;
         }
@@ -1107,11 +1074,7 @@
             }
 
             stats.TotalActivations++;
-            if (!stats.Activations.ContainsKey(Scp914Object.KnobStatus))
-                stats.Activations.Add(Scp914Object.KnobStatus, GetPI(1, stats.TotalActivations, () => MainPlugin.Reporter.GetStat<SCPStats>().TotalActivations));
-            else
-                stats.Activations[Scp914Object.KnobStatus].IncrementValue(1);
-
+            IncrementDictStatPercentInt(stats.Activations, Scp914Object.KnobStatus, 1, stats.TotalActivations, () => MainPlugin.Reporter.GetStat<SCPStats>().TotalActivations);
             Hold(stats);
             Interactions++;
         }
@@ -1313,11 +1276,7 @@
             else if (type.IsWeapon(false))
                 stats.FirearmUpgrades++;
 
-            if (!stats.Upgrades.ContainsKey(type))
-                stats.Upgrades.Add(type, GetPI(1, stats.TotalItemUpgrades, () => MainPlugin.Reporter.GetStat<SCPStats>().TotalItemUpgrades));
-            else
-                stats.Upgrades[type].IncrementValue(1);
-
+            IncrementDictStatPercentInt(stats.Upgrades, type, 1, stats.TotalItemUpgrades, () => MainPlugin.Reporter.GetStat<SCPStats>().TotalItemUpgrades);
             Hold(stats);
         }
 

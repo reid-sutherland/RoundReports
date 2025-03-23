@@ -7,7 +7,6 @@
     /// </summary>
     public enum CustomTeam
     {
-#pragma warning disable SA1602
         // Base Game
         SCPs,
         FoundationForces,
@@ -18,8 +17,7 @@
         OtherAlive,
 
         // Custom
-        SH,
-        UIU,
-#pragma warning restore SA1602
+        SerpentsHand,
+        UIURescueSquad,
     }
 }

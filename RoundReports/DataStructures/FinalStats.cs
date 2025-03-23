@@ -1,6 +1,5 @@
 ﻿namespace RoundReports
 {
-#pragma warning disable SA1600
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -14,6 +13,16 @@
         public string Title => "Final Statistics";
 
         public int Order => 2;
+
+        public int ScpKills => KillsByTeam.ContainsKey(CustomTeam.SCPs) ? KillsByTeam[CustomTeam.SCPs].Value : 0;
+
+        public int MtfKills => KillsByTeam.ContainsKey(CustomTeam.FoundationForces) ? KillsByTeam[CustomTeam.FoundationForces].Value : 0;
+
+        public int ChaosKills => KillsByTeam.ContainsKey(CustomTeam.ChaosInsurgency) ? KillsByTeam[CustomTeam.ChaosInsurgency].Value : 0;
+
+        public int ScientistKills => KillsByTeam.ContainsKey(CustomTeam.Scientists) ? KillsByTeam[CustomTeam.Scientists].Value : 0;
+
+        public int DClassKills => KillsByTeam.ContainsKey(CustomTeam.ClassD) ? KillsByTeam[CustomTeam.ClassD].Value : 0;
 
         [Header(nameof(Translation.EndofRoundSummary))]
         [Translation(nameof(Translation.WinningTeam))]
@@ -36,40 +45,9 @@
         [BindStat(StatType.TotalKills)]
         public int TotalKills { get; set; }
 
-        [Translation(nameof(Translation.ScpKills))]
-        [BindStat(StatType.SCPKills)]
-        public int SCPKills { get; set; }
-
-        [Translation(nameof(Translation.DClassKills))]
-        [BindStat(StatType.DClassKills)]
-        public int DClassKills { get; set; }
-
-        [Translation(nameof(Translation.ScientistKills))]
-        [BindStat(StatType.ScientistKills)]
-        public int ScientistKills { get; set; }
-
-        [Translation(nameof(Translation.MtfKills))]
-        [BindStat(StatType.MTFKills)]
-        public int MTFKills { get; set; }
-
-        [Translation(nameof(Translation.ChaosKills))]
-        [BindStat(StatType.ChaosKills)]
-        public int ChaosKills { get; set; }
-
-        [HideIfDefault]
-        [Translation(nameof(Translation.SerpentsHandKills))]
-        [BindStat(StatType.SerpentsHandKills)]
-        public int SerpentsHandKills { get; set; }
-
-        [HideIfDefault]
-        [Translation(nameof(Translation.UiuKills))]
-        [BindStat(StatType.UIUKills)]
-        public int UIUKills { get; set; }
-
-        [HideIfDefault]
-        [Translation(nameof(Translation.TutorialKills))]
-        [BindStat(StatType.TutorialKills)]
-        public int TutorialKills { get; set; }
+        [Translation(nameof(Translation.KillsByTeam))]
+        [BindStat(StatType.KillsByTeam)]
+        public Dictionary<CustomTeam, PercentInt> KillsByTeam { get; set; }
 
         [Translation(nameof(Translation.SurvivingPlayers))]
         [BindStat(StatType.SurvivingPlayers)]
@@ -131,22 +109,27 @@
 
         public void Setup()
         {
+            WinningTeam = MainPlugin.Translations.NoData;
+            EndTime = DateTime.MinValue;
+            RoundTime = TimeSpan.Zero;
+            KillsByTeam = DictionaryPool<CustomTeam, PercentInt>.Pool.Get();
             SurvivingPlayers = ListPool<string>.Pool.Get();
             PlayerDoorsOpened = DictionaryPool<Player, PercentInt>.Pool.Get();
             PlayerDoorsClosed = DictionaryPool<Player, PercentInt>.Pool.Get();
-            WinningTeam = MainPlugin.Translations.NoData;
-            RoundTime = TimeSpan.Zero;
-            EndTime = DateTime.MinValue;
         }
 
         public void Cleanup()
         {
+            foreach (KeyValuePair<CustomTeam, PercentInt> kvp in KillsByTeam)
+                PercentIntPool.Pool.Return(kvp.Value);
+
             foreach (KeyValuePair<Player, PercentInt> kvp in PlayerDoorsOpened)
                 PercentIntPool.Pool.Return(kvp.Value);
 
             foreach (KeyValuePair<Player, PercentInt> kvp in PlayerDoorsClosed)
                 PercentIntPool.Pool.Return(kvp.Value);
 
+            DictionaryPool<CustomTeam, PercentInt>.Pool.Return(KillsByTeam);
             ListPool<string>.Pool.Return(SurvivingPlayers);
             DictionaryPool<Player, PercentInt>.Pool.Return(PlayerDoorsOpened);
             DictionaryPool<Player, PercentInt>.Pool.Return(PlayerDoorsClosed);
@@ -154,10 +137,10 @@
 
         public void FillOutFinal()
         {
-            DoorsDestroyed = Door.List.Count(d => d is BreakableDoor bd && bd.IsDestroyed);
             EndTime = DateTime.Now;
             RoundTime = Round.ElapsedTime;
             TotalInteractions = MainPlugin.Handlers.Interactions;
+            DoorsDestroyed = Door.List.Count(d => d is BreakableDoor bd && bd.IsDestroyed);
 
             foreach (Player player in Player.Get(plr => plr.IsAlive && EventHandlers.ECheck(plr)))
                 SurvivingPlayers.Add($"{Reporter.GetDisplay(player, typeof(Player))} ({EventHandlers.GetRole(player)})");
@@ -192,5 +175,4 @@
             }
         }
     }
-#pragma warning restore SA1600
 }
