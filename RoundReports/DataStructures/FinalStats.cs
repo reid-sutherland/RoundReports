@@ -152,33 +152,32 @@
             foreach (Player player in Player.Get(plr => plr.IsAlive && EventHandlers.ECheck(plr)))
                 SurvivingPlayers.Add($"{Reporter.GetDisplay(player, typeof(Player))} ({EventHandlers.GetRole(player)})");
 
-            MostTalkativeHumanPlayer = string.Empty;
-            MostTalkativeScpPlayer = string.Empty;
-
-            List<KeyValuePair<Player, float>> talkers = MainPlugin.Handlers.Talkers.OrderByDescending(r => r.Value).ToList();
-            if (!talkers.IsEmpty())
+            MostTalkativeHumanPlayer = "Dedicated Server (420ms)";
+            List<KeyValuePair<Player, float>> humanTalkers = MainPlugin.Handlers.HumanTalkers.OrderByDescending(r => r.Value).ToList();
+            if (!humanTalkers.IsEmpty())
             {
-                foreach (KeyValuePair<Player, float> talker in talkers)
-                {
-                    if (talker.Key.IsHuman && string.IsNullOrEmpty(MostTalkativeHumanPlayer))
-                    {
-                        MostTalkativeHumanPlayer = $"{talker.Key.Nickname} ({Reporter.GetDisplay(TimeSpan.FromSeconds(talker.Value))})";
-                    }
-                    else if (talker.Key.IsScp && string.IsNullOrEmpty(MostTalkativeScpPlayer))
-                    {
-                        MostTalkativeScpPlayer = $"{talker.Key.Nickname} ({Reporter.GetDisplay(TimeSpan.FromSeconds(talker.Value))})";
-                    }
-
-                    if (!string.IsNullOrEmpty(MostTalkativeHumanPlayer) && !string.IsNullOrEmpty(MostTalkativeScpPlayer))
-                    {
-                        break;
-                    }
-                }
+                var talker = humanTalkers.First();
+                MostTalkativeHumanPlayer = $"{talker.Key.Nickname} ({Reporter.GetDisplay(TimeSpan.FromSeconds(talker.Value))})";
             }
-            else
+
+            MostTalkativeScpPlayer = "Dedicated Server (420ms)";
+            List<KeyValuePair<Player, float>> scpTalkers = MainPlugin.Handlers.ScpTalkers.OrderByDescending(r => r.Value).ToList();
+            if (!scpTalkers.IsEmpty())
             {
-                MostTalkativeHumanPlayer = "Dedicated Server (420ms)";
-                MostTalkativeScpPlayer = "Dedicated Server (420ms)";
+                var talker = scpTalkers.First();
+                MostTalkativeScpPlayer = $"{talker.Key.Nickname} ({Reporter.GetDisplay(TimeSpan.FromSeconds(talker.Value))})";
+            }
+
+            // TODO: Remove this - just logging bc i think some of the talk times were inflated a bit
+            Log.Debug("Logging human talkers...");
+            foreach (var talker in humanTalkers)
+            {
+                Log.Debug($"-- player: {talker.Key.Nickname} - time: {talker.Value}");
+            }
+            Log.Debug("Logging scp talkers...");
+            foreach (var talker in scpTalkers)
+            {
+                Log.Debug($"-- player: {talker.Key.Nickname} - time: {talker.Value}");
             }
         }
     }

@@ -87,9 +87,14 @@
         public Dictionary<Camera, int> UsedCameras { get; } = new();
 
         /// <summary>
-        /// Gets players that have talked.
+        /// Gets Human players that have talked.
         /// </summary>
-        public Dictionary<Player, float> Talkers { get; } = new();
+        public Dictionary<Player, float> HumanTalkers { get; } = new();
+
+        /// <summary>
+        /// Gets Scp players that have talked.
+        /// </summary>
+        public Dictionary<Player, float> ScpTalkers { get; } = new();
 
         /// <summary>
         /// Gets or sets a value indicating whether or not final stats have been filled out.
@@ -318,7 +323,8 @@
             FirstDoor = false;
             Interactions = 0;
             UsedCameras.Clear();
-            Talkers.Clear();
+            HumanTalkers.Clear();
+            ScpTalkers.Clear();
             IsSpeakingLock.Clear();
             FinalStatsFilledOut = false;
 
@@ -657,7 +663,18 @@
         {
             if (!Round.InProgress || !ev.IsAllowed || !ECheck(ev.Player) || ev.Player.Role.Type is RoleTypeId.Overwatch) return;
 
-            IncrementDictStatFloat(Talkers, ev.Player, Time.deltaTime);
+            if (ev.Player.IsHuman)
+            {
+                IncrementDictStatFloat(HumanTalkers, ev.Player, Time.deltaTime);
+            }
+            else if (ev.Player.IsScp)
+            {
+                IncrementDictStatFloat(ScpTalkers, ev.Player, Time.deltaTime);
+            }
+            else
+            {
+                Log.Debug($"OnVoiceChatting: Got talker that is not human or scp: {ev.Player.Nickname} - role: {ev.Player.Role}");
+            }
         }
 
         /// <summary>
