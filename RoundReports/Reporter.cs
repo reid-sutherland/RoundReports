@@ -438,10 +438,17 @@
                             bldr.AppendLine($"\n====== {headerAttribute.Header} ======");
                         }
 
+                        // Hide
+                        HideAttribute hideAttr = pinfo.GetCustomAttribute<HideAttribute>();
+                        if (hideAttr is not null)
+                        {
+                            continue;
+                        }
+
                         // Hide if default value
-                        HideIfDefaultAttribute hideAttr = pinfo.GetCustomAttribute<HideIfDefaultAttribute>();
+                        HideIfDefaultAttribute hideIfDefaultAttr = pinfo.GetCustomAttribute<HideIfDefaultAttribute>();
                         object propertyValue = pinfo.GetValue(stat);
-                        if (hideAttr is not null && object.Equals(propertyValue, GetDefault(pinfo.PropertyType)))
+                        if (hideIfDefaultAttr is not null && object.Equals(propertyValue, GetDefault(pinfo.PropertyType)))
                         {
                             continue;
                         }
@@ -506,21 +513,41 @@
         {
             Log.Debug("Report upload request received, step: 3.");
             yield return Timing.WaitForSeconds(0.5f);
-            PasteEntry reportData = BuildReport();
+
+            // Put everything into a json and write it to a file
+            // - note: missing Remarks
+            IOrderedEnumerable<IReportStat> stats = Stats.OrderBy(stat => stat.Order);
+            Dictionary<string, IReportStat> fullReport = new();
+            foreach (IReportStat stat in stats)
+            {
+                fullReport.Add(stat.Title, stat);
+            }
+            string filepath = "C:\\Users\\Jacob\\Desktop\\SCPSecretLab\\ROUND_REPORT.json";
+            string jsonReport = JsonConvert.SerializeObject(fullReport, Formatting.Indented);
+            Log.Info($"Writing round report to file: {filepath} -- len: {jsonReport.Length}");
+            try
+            {
+                File.WriteAllText(filepath, jsonReport);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occurred writing report to file: {ex}");
+            }
 
             // Upload paste
+            PasteEntry reportData = BuildReport();
             if (MainPlugin.Configs.PasteEnabled)
             {
                 Timing.RunCoroutine(TryUpload(reportData));
             }
 
             // Broadcast
-            Log.Debug("Sending broadcasts.");
             try
             {
                 List<EBroadcast> brList = MainPlugin.Singleton.Config.EndingBroadcasts;
                 if (brList is not null && brList.Count > 0 && !MainPlugin.IsRestarting)
                 {
+                    Log.Debug("Sending broadcasts.");
                     if (brList.Any(br => br.Show))
                         Map.ClearBroadcasts();
 
@@ -530,6 +557,10 @@
                         Log.Debug($"Queueing broadcast: {br.Content}");
                         Map.Broadcast(br);
                     }
+                }
+                else
+                {
+                    Log.Debug("No broadcasts to send.");
                 }
             }
             catch (Exception e)

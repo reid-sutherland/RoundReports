@@ -12,16 +12,23 @@
         [Translation(nameof(Translation.FinalStatsTitle))]
         public string Title => "Final Statistics";
 
+        // technically Order is manually ignored
+        [Hide]
         public int Order => 2;
 
+        [Hide]
         public int ScpKills => KillsByTeam.ContainsKey(CustomTeam.SCPs) ? KillsByTeam[CustomTeam.SCPs].Value : 0;
 
+        [Hide]
         public int MtfKills => KillsByTeam.ContainsKey(CustomTeam.FoundationForces) ? KillsByTeam[CustomTeam.FoundationForces].Value : 0;
 
+        [Hide]
         public int ChaosKills => KillsByTeam.ContainsKey(CustomTeam.ChaosInsurgency) ? KillsByTeam[CustomTeam.ChaosInsurgency].Value : 0;
 
+        [Hide]
         public int ScientistKills => KillsByTeam.ContainsKey(CustomTeam.Scientists) ? KillsByTeam[CustomTeam.Scientists].Value : 0;
 
+        [Hide]
         public int DClassKills => KillsByTeam.ContainsKey(CustomTeam.ClassD) ? KillsByTeam[CustomTeam.ClassD].Value : 0;
 
         [Header(nameof(Translation.EndofRoundSummary))]
