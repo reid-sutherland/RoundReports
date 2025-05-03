@@ -1,11 +1,8 @@
-name: RoundReports Build
+name: '[DEV] Build'
 on:
   push:
     branches:
-      - master
-  pull_request:
-    branches:
-      - master
+      - dev
   workflow_dispatch:
 env:
   REFERENCES_URL: https://exmod-team.github.io/SL-References/Dev.zip
@@ -16,7 +13,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v3.3.0
+      - uses: actions/checkout@v4
 
       - name: Restore Packages
         run: nuget restore
@@ -37,7 +34,7 @@ jobs:
           msbuild RoundReports\RoundReports.csproj -t:rebuild -property:Configuration=Release -property:ReferencePath="${{ env.REFERENCES_PATH }}"
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: RoundReports
           path: "RoundReports/bin/Release/net4.8.1/RoundReports.dll"
