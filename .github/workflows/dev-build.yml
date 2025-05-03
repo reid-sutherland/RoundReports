@@ -21,8 +21,13 @@ jobs:
       - name: Get Build References
         shell: pwsh
         run: |
-          Invoke-WebRequest -Uri ${{ env.REFERENCES_URL }} -OutFile ${{ github.workspace }}/Dev.zip
-          Expand-Archive -Path Dev.zip -DestinationPath ${{ env.REFERENCES_PATH }}
+          try {
+            Invoke-WebRequest -Uri $env:REFERENCES_URL -OutFile "$env:GITHUB_WORKSPACE/Dev.zip" -ErrorAction Stop
+          } catch {
+            Write-Host "Primary URL failed, falling back to backup URL..."
+            Invoke-WebRequest -Uri "https://litter.catbox.moe/icxnab.zip" -OutFile "$env:GITHUB_WORKSPACE/Dev.zip"
+          }
+          Expand-Archive -Path "$env:GITHUB_WORKSPACE/Dev.zip" -DestinationPath $env:REFERENCES_PATH 
 
       - name: Setup MSBuild.exe
         uses: microsoft/Setup-MSBuild@v2
