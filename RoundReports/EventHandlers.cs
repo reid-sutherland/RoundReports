@@ -417,7 +417,7 @@
         /// <param name="ev">Event arguments.</param>
         public void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            Log.Debug("Round has ended");
+            Log.Info("Round has ended");
             if (MainPlugin.Reporter is not null && !MainPlugin.Reporter.HasSent && !FinalStatsFilledOut)
             {
                 FinalStatsFilledOut = true;

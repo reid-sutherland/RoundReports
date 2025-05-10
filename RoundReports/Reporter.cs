@@ -514,26 +514,6 @@
             Log.Debug("Report upload request received, step: 3.");
             yield return Timing.WaitForSeconds(0.5f);
 
-            // Put everything into a json and write it to a file
-            // - note: missing Remarks
-            IOrderedEnumerable<IReportStat> stats = Stats.OrderBy(stat => stat.Order);
-            Dictionary<string, IReportStat> fullReport = new();
-            foreach (IReportStat stat in stats)
-            {
-                fullReport.Add(stat.Title, stat);
-            }
-            string filepath = "C:\\Users\\Jacob\\Desktop\\SCPSecretLab\\ROUND_REPORT.json";
-            string jsonReport = JsonConvert.SerializeObject(fullReport, Formatting.Indented);
-            Log.Info($"Writing round report to file: {filepath} -- len: {jsonReport.Length}");
-            try
-            {
-                File.WriteAllText(filepath, jsonReport);
-            }
-            catch (Exception ex)
-            {
-                Log.Error($"Error occurred writing report to file: {ex}");
-            }
-
             // Upload paste
             PasteEntry reportData = BuildReport();
             if (MainPlugin.Configs.PasteEnabled)
@@ -566,6 +546,26 @@
             catch (Exception e)
             {
                 Log.Error($"Exception when showing round-end broadcasts: {e}");
+            }
+
+            // Put everything into a json and write it to a file
+            // - note: missing Remarks
+            IOrderedEnumerable<IReportStat> stats = Stats.OrderBy(stat => stat.Order);
+            Dictionary<string, IReportStat> fullReport = new();
+            foreach (IReportStat stat in stats)
+            {
+                fullReport.Add(stat.Title, stat);
+            }
+            string filepath = "C:\\Users\\Jacob\\Desktop\\SCPSecretLab\\ROUND_REPORT.json";
+            string jsonReport = JsonConvert.SerializeObject(fullReport, Formatting.Indented);
+            Log.Info($"Writing round report to file: {filepath} -- len: {jsonReport.Length}");
+            try
+            {
+                File.WriteAllText(filepath, jsonReport);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Error occurred writing report to file: {ex}");
             }
         }
 
