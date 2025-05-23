@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  REFERENCES_URL: https://exmod-team.github.io/SL-References/Dev.zip
+  REFERENCES_URL: https://exslmod-team.github.io/SL-References/Dev.zip
   REFERENCES_PATH: ${{ github.workspace }}/References
   EXILED_REFERENCES: ${{ github.workspace }}/References
 
@@ -26,12 +26,7 @@ jobs:
       - name: 📦 Download dependencies
         shell: pwsh
         run: |
-          try {
-            Invoke-WebRequest -Uri $env:REFERENCES_URL -OutFile "$env:GITHUB_WORKSPACE/Dev.zip" -ErrorAction Stop
-          } catch {
-            Write-Host "Primary URL failed, falling back to backup URL..."
-            Invoke-WebRequest -Uri "https://litter.catbox.moe/25ls5h.zip" -OutFile "$env:GITHUB_WORKSPACE/Dev.zip"
-          }
+          Invoke-WebRequest -Uri $env:REFERENCES_URL -OutFile "$env:GITHUB_WORKSPACE/Dev.zip" -ErrorAction Stop
           Expand-Archive -Path "$env:GITHUB_WORKSPACE/Dev.zip" -DestinationPath $env:REFERENCES_PATH
 
       - name: 🧱 Setup MSBuild
