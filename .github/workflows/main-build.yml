@@ -1,40 +1,80 @@
-name: '[MASTER] Build'
+name: Build and Draft Release
+
 on:
   push:
     branches:
       - master
   workflow_dispatch:
+
 env:
   REFERENCES_URL: https://exmod-team.github.io/SL-References/Dev.zip
   REFERENCES_PATH: ${{ github.workspace }}/References
   EXILED_REFERENCES: ${{ github.workspace }}/References
+
 jobs:
   build:
+    name: 🛠️ Build Project
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
 
-      - name: Restore Packages
+      - name: 🔧 Restore NuGet packages
         run: nuget restore
 
-      - name: Get Build References
+      - name: 📦 Download dependencies
         shell: pwsh
         run: |
-          Invoke-WebRequest -Uri ${{ env.REFERENCES_URL }} -OutFile ${{ github.workspace }}/Dev.zip
-          Expand-Archive -Path Dev.zip -DestinationPath ${{ env.REFERENCES_PATH }}
+          try {
+            Invoke-WebRequest -Uri $env:REFERENCES_URL -OutFile "$env:GITHUB_WORKSPACE/Dev.zip" -ErrorAction Stop
+          } catch {
+            Write-Host "Primary URL failed, falling back to backup URL..."
+            Invoke-WebRequest -Uri "https://litter.catbox.moe/25ls5h.zip" -OutFile "$env:GITHUB_WORKSPACE/Dev.zip"
+          }
+          Expand-Archive -Path "$env:GITHUB_WORKSPACE/Dev.zip" -DestinationPath $env:REFERENCES_PATH
 
-      - name: Setup MSBuild.exe
-        uses: microsoft/Setup-MSBuild@v2
-        env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: "true"
+      - name: 🧱 Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
 
-      - name: Build
+      - name: 🏗️ Build the DLL
         run: |
           msbuild RoundReports\RoundReports.csproj -t:rebuild -property:Configuration=Release -property:ReferencePath="${{ env.REFERENCES_PATH }}"
 
-      - name: Upload artifacts
+      - name: 📤 Upload built DLL
         uses: actions/upload-artifact@v4
         with:
           name: RoundReports
-          path: "RoundReports/bin/Release/net4.8.1/RoundReports.dll"
+          path: RoundReports/bin/Release/net4.8.1/RoundReports.dll
+
+  release:
+    name: 📝 Draft Release
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🏷️ Extract version from MainPlugin.cs
+        id: get_version
+        run: |
+          VERSION=$(grep -Po 'Version\s*=>\s*new\s*\(\K[0-9]+,[ ]*[0-9]+,[ ]*[0-9]+' RoundReports/MainPlugin.cs | head -n1 | tr -d ' ' | tr ',' '.')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: 📦 Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: RoundReports
+          path: artifact
+
+      - name: 📝 Create Draft GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.get_version.outputs.version }}
+          name: v${{ steps.get_version.outputs.version }}
+          draft: true
+          prerelease: false
+          files: artifact/RoundReports.dll
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
