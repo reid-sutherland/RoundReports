@@ -2,18 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Linq;
     using Exiled.API.Enums;
     using Exiled.API.Extensions;
     using Exiled.API.Features;
     using Exiled.API.Features.Doors;
     using Exiled.API.Features.Items;
-    using Exiled.API.Features.Pools;
     using Exiled.API.Features.Roles;
-    using Exiled.CustomRoles.API;
-    using Exiled.CustomRoles.API.Features;
-    using Exiled.Events;
     using Exiled.Events.EventArgs.Player;
     using Exiled.Events.EventArgs.Scp049;
     using Exiled.Events.EventArgs.Scp079;
@@ -27,10 +22,7 @@
     using Exiled.Events.EventArgs.Warhead;
     using MEC;
     using PlayerRoles;
-    using PlayerRoles.PlayableScps.Scp079.Cameras;
     using PlayerRoles.PlayableScps.Scp079.Rewards;
-    using PlayerRoles.Voice;
-    using PluginAPI.Roles;
     using Scp914;
     using UnityEngine;
     using Camera = Exiled.API.Features.Camera;
