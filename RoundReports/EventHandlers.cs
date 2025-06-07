@@ -138,9 +138,9 @@
             if (player is null)
                 return CustomTeam.Dead;
             if (player.SessionVariables.ContainsKey("IsSH"))
-                return CustomTeam.SerpentsHand;
+                return CustomTeam.SH;
             else if (player.SessionVariables.ContainsKey("IsUIU"))
-                return CustomTeam.UIURescueSquad;
+                return CustomTeam.UIU;
             else if (player.SessionVariables.ContainsKey("IsScp008"))
                 return CustomTeam.SCPs;
             else if (player.SessionVariables.ContainsKey("IsScp035"))
@@ -428,14 +428,14 @@
             if (!ev.IsAllowed || ev.Players.Count < 1) return;
             MiscStats stats = GetStat<MiscStats>();
 
-            if (ev.NextKnownTeam is Faction.FoundationStaff)
+            if (ev.NextKnownTeam is PlayerRoles.Faction.FoundationStaff)
             {
                 if (IsUIUTeamSpawnable())
                     stats.SpawnWaves.Add("UIU");
                 else if (ev.IsAllowed)
                     stats.SpawnWaves.Add("Nine Tailed Fox");
             }
-            else if (ev.NextKnownTeam is Faction.FoundationEnemy)
+            else if (ev.NextKnownTeam is PlayerRoles.Faction.FoundationEnemy)
             {
                 if (IsSerpentsHandTeamSpawnable())
                     stats.SpawnWaves.Add("Serpent's Hand");
@@ -468,7 +468,7 @@
         public void OnSpawned(SpawnedEventArgs ev)
         {
             if (!Round.InProgress || MainPlugin.IsRestarting || Round.ElapsedTime.TotalSeconds <= 30 || !ECheck(ev.Player)) return;
-            if (GetTeam(ev.Player) is CustomTeam.FoundationForces or CustomTeam.ChaosInsurgency or CustomTeam.SerpentsHand or CustomTeam.UIURescueSquad)
+            if (GetTeam(ev.Player) is CustomTeam.FoundationForces or CustomTeam.ChaosInsurgency or CustomTeam.SH or CustomTeam.UIU)
             {
                 MiscStats stats = GetStat<MiscStats>();
                 stats.TotalRespawned++;
@@ -587,7 +587,7 @@
                 {
                     foreach (Player player in Player.Get(ECheck))
                     {
-                        if (player.Role is Scp079Role role && role.SubroutineModule.TryGetSubroutine(out Scp079RewardManager manager) && manager._markedRooms.ContainsKey(ev.Player.CurrentRoom.Identifier))
+                        if (player.Role is Scp079Role role && role.MarkedRooms.Contains(ev.Player.CurrentRoom))
                             IncrementPoints(player, MvpSettings.Points.Scp079AssistKill, MainPlugin.Translations.AssistKill);
                     }
                 }
@@ -641,7 +641,7 @@
             {
                 foreach (Player player in Player.Get(ECheck))
                 {
-                    if (player.Role is Scp079Role role && role.SubroutineModule.TryGetSubroutine(out Scp079RewardManager manager) && manager._markedRooms.ContainsKey(ev.Player.CurrentRoom.Identifier))
+                    if (player.Role is Scp079Role role && role.MarkedRooms.Contains(ev.Player.CurrentRoom))
                         IncrementPoints(player, MvpSettings.Points.Scp079AssistKill, MainPlugin.Translations.AssistKill);
                 }
             }

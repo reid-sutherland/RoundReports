@@ -75,10 +75,7 @@
         public override string Author => "ReidSutherland";
 
         /// <inheritdoc/>
-        public override Version Version => new(1, 0, 2);
-
-        /// <inheritdoc/>
-        public override Version RequiredExiledVersion => new(8, 8, 0);
+        public override Version Version => new(1, 1, 5);
 
         /// <inheritdoc/>
         public override PluginPriority Priority => PluginPriority.Last;
