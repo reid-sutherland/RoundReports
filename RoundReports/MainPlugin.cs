@@ -23,6 +23,54 @@
     /// <inheritdoc/>
     public class MainPlugin : Plugin<Config, Translation>
     {
+        /// <inheritdoc/>
+        public override string Author { get; } = "DeadServer Team";
+
+        /// <inheritdoc/>
+        public override string Name { get; } = "Round Reports";
+
+        /// <inheritdoc/>
+        public override string Prefix { get; } = "RoundReports";
+
+        /// <inheritdoc/>
+        public override Version Version { get; } = new(1, 1, 0);
+
+        /// <inheritdoc/>
+        public override Version RequiredExiledVersion { get; } = new(9, 6, 1);
+
+        /// <inheritdoc/>
+        public override PluginPriority Priority { get; } = PluginPriority.Medium;
+
+        /// <summary>
+        /// Gets the <see cref="MainPlugin"/> singleton.
+        /// </summary>
+        public static MainPlugin Singleton { get; private set; }
+
+        /// <summary>
+        /// Gets the <see cref="Config"/> singleton.
+        /// </summary>
+        public static Config Configs => Singleton.Config;
+
+        /// <summary>
+        /// Gets or sets the currently active reporter.
+        /// </summary>
+        public static Reporter Reporter { get; set; }
+
+        /// <summary>
+        /// Gets the <see cref="EventHandlers"/> singleton.
+        /// </summary>
+        public static EventHandlers Handlers { get; private set; }
+
+        /// <summary>
+        /// Gets the <see cref="Translation"/> singleton.
+        /// </summary>
+        public static Translation Translations => Singleton.Translation;
+
+        /// <summary>
+        /// Gets the <see cref="HarmonyLib.Harmony"/> singleton.
+        /// </summary>
+        public static Harmony Harmony { get; private set; }
+
         /// <summary>
         /// Gets the Serpent's Hand <see cref="Assembly"/>, if it is installed.
         /// </summary>
@@ -34,51 +82,9 @@
         public static Assembly UIURescueSquadAssembly { get; private set; }
 
         /// <summary>
-        /// Gets or sets the currently active reporter.
-        /// </summary>
-        public static Reporter Reporter { get; set; }
-
-        /// <summary>
-        /// Gets the <see cref="MainPlugin"/> singleton.
-        /// </summary>
-        public static MainPlugin Singleton { get; private set; }
-
-        /// <summary>
-        /// Gets the <see cref="EventHandlers"/> singleton.
-        /// </summary>
-        public static EventHandlers Handlers { get; private set; }
-
-        /// <summary>
-        /// Gets the <see cref="HarmonyLib.Harmony"/> singleton.
-        /// </summary>
-        public static Harmony Harmony { get; private set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether or not the round is currently restarting.
         /// </summary>
         public static bool IsRestarting { get; set; } = false;
-
-        /// <summary>
-        /// Gets the <see cref="Translation"/> singleton.
-        /// </summary>
-        public static Translation Translations => Singleton.Translation;
-
-        /// <summary>
-        /// Gets the <see cref="Config"/> singleton.
-        /// </summary>
-        public static Config Configs => Singleton.Config;
-
-        /// <inheritdoc/>
-        public override string Name => "RoundReports";
-
-        /// <inheritdoc/>
-        public override string Author => "ReidSutherland";
-
-        /// <inheritdoc/>
-        public override Version Version => new(1, 1, 5);
-
-        /// <inheritdoc/>
-        public override PluginPriority Priority => PluginPriority.Last;
 
         /// <summary>
         /// Checks if a stat is enabled.

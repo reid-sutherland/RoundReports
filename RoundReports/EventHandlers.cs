@@ -22,7 +22,6 @@
     using Exiled.Events.EventArgs.Warhead;
     using MEC;
     using PlayerRoles;
-    using PlayerRoles.PlayableScps.Scp079.Rewards;
     using Scp914;
     using UnityEngine;
     using Camera = Exiled.API.Features.Camera;
@@ -138,9 +137,9 @@
             if (player is null)
                 return CustomTeam.Dead;
             if (player.SessionVariables.ContainsKey("IsSH"))
-                return CustomTeam.SH;
+                return CustomTeam.SerpentsHand;
             else if (player.SessionVariables.ContainsKey("IsUIU"))
-                return CustomTeam.UIU;
+                return CustomTeam.UIURescueSquad;
             else if (player.SessionVariables.ContainsKey("IsScp008"))
                 return CustomTeam.SCPs;
             else if (player.SessionVariables.ContainsKey("IsScp035"))
@@ -468,7 +467,7 @@
         public void OnSpawned(SpawnedEventArgs ev)
         {
             if (!Round.InProgress || MainPlugin.IsRestarting || Round.ElapsedTime.TotalSeconds <= 30 || !ECheck(ev.Player)) return;
-            if (GetTeam(ev.Player) is CustomTeam.FoundationForces or CustomTeam.ChaosInsurgency or CustomTeam.SH or CustomTeam.UIU)
+            if (GetTeam(ev.Player) is CustomTeam.FoundationForces or CustomTeam.ChaosInsurgency or CustomTeam.SerpentsHand or CustomTeam.UIURescueSquad)
             {
                 MiscStats stats = GetStat<MiscStats>();
                 stats.TotalRespawned++;
