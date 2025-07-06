@@ -1,23 +1,22 @@
-﻿namespace RoundReports
+﻿using PlayerRoles;
+
+namespace RoundReports;
+
+/// <summary>
+/// Custom version of <see cref="Team"/> that includes custom teams the plugin supports.
+/// </summary>
+public enum CustomTeam
 {
-    using PlayerRoles;
+    // Base Game
+    SCPs,
+    FoundationForces,
+    ChaosInsurgency,
+    Scientists,
+    ClassD,
+    Dead,
+    OtherAlive,
 
-    /// <summary>
-    /// Custom version of <see cref="Team"/> that includes custom teams the plugin supports.
-    /// </summary>
-    public enum CustomTeam
-    {
-        // Base Game
-        SCPs,
-        FoundationForces,
-        ChaosInsurgency,
-        Scientists,
-        ClassD,
-        Dead,
-        OtherAlive,
-
-        // Custom
-        SerpentsHand,
-        UIURescueSquad,
-    }
+    // Custom
+    SerpentsHand,
+    UIURescueSquad,
 }

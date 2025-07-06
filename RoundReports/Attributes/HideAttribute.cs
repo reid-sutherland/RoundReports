@@ -1,12 +1,11 @@
-﻿namespace RoundReports
-{
-    using System;
+﻿using System;
 
-    /// <summary>
-    /// Tells the reporter to not show a stat.
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Property)]
-    public class HideAttribute : Attribute
-    {
-    }
+namespace RoundReports;
+
+/// <summary>
+/// Tells the reporter to not show a stat.
+/// </summary>
+[AttributeUsage(AttributeTargets.Property)]
+public class HideAttribute : Attribute
+{
 }

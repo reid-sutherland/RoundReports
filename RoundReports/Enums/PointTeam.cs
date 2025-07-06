@@ -1,23 +1,22 @@
-﻿namespace RoundReports
+﻿namespace RoundReports;
+
+/// <summary>
+/// Determines teams that can gain MVP points.
+/// </summary>
+public enum PointTeam
 {
     /// <summary>
-    /// Determines teams that can gain MVP points.
+    /// N/A
     /// </summary>
-    public enum PointTeam
-    {
-        /// <summary>
-        /// N/A
-        /// </summary>
-        None,
+    None,
 
-        /// <summary>
-        /// The humans.
-        /// </summary>
-        Human,
+    /// <summary>
+    /// The humans.
+    /// </summary>
+    Human,
 
-        /// <summary>
-        /// The SCPs.
-        /// </summary>
-        SCP,
-    }
+    /// <summary>
+    /// The SCPs.
+    /// </summary>
+    SCP,
 }

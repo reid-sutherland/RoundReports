@@ -1,18 +1,17 @@
-﻿namespace RoundReports
+﻿namespace RoundReports;
+
+/// <summary>
+/// Defines the type of Discord embed color to be used.
+/// </summary>
+public enum EmbedColorType
 {
     /// <summary>
-    /// Defines the type of Discord embed color to be used.
+    /// The winning team's color will be used in embeds.
     /// </summary>
-    public enum EmbedColorType
-    {
-        /// <summary>
-        /// The winning team's color will be used in embeds.
-        /// </summary>
-        WinningTeam,
+    WinningTeam,
 
-        /// <summary>
-        /// The custom color provided in configs will be used.
-        /// </summary>
-        Custom,
-    }
+    /// <summary>
+    /// The custom color provided in configs will be used.
+    /// </summary>
+    Custom,
 }

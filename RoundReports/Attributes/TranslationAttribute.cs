@@ -1,38 +1,37 @@
-﻿namespace RoundReports
+﻿using System;
+using System.Reflection;
+
+namespace RoundReports;
+
+/// <summary>
+/// Generate a stat title from translations.
+/// </summary>
+[AttributeUsage(AttributeTargets.Property)]
+public class TranslationAttribute : Attribute
 {
-    using System;
-    using System.Reflection;
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TranslationAttribute"/> class.
+    /// </summary>
+    /// <param name="translationName">The key to use from the translation file.</param>
+    public TranslationAttribute(string translationName)
+    {
+        KeyName = translationName;
+    }
 
     /// <summary>
-    /// Generate a stat title from translations.
+    /// Gets the key that is being used from translation.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property)]
-    public class TranslationAttribute : Attribute
+    public string KeyName { get; }
+
+    /// <summary>
+    /// Gets the text that will be displayed as the stat.
+    /// </summary>
+    public string Text
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TranslationAttribute"/> class.
-        /// </summary>
-        /// <param name="translationName">The key to use from the translation file.</param>
-        public TranslationAttribute(string translationName)
+        get
         {
-            KeyName = translationName;
-        }
-
-        /// <summary>
-        /// Gets the key that is being used from translation.
-        /// </summary>
-        public string KeyName { get; }
-
-        /// <summary>
-        /// Gets the text that will be displayed as the stat.
-        /// </summary>
-        public string Text
-        {
-            get
-            {
-                PropertyInfo info = typeof(Translation).GetProperty(KeyName);
-                return info.GetValue(MainPlugin.Translations).ToString();
-            }
+            PropertyInfo info = typeof(Translation).GetProperty(KeyName);
+            return info.GetValue(MainPlugin.Translations).ToString();
         }
     }
 }
