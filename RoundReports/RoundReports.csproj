@@ -12,10 +12,20 @@
         <RunPostBuildEvent>Always</RunPostBuildEvent>
     </PropertyGroup>
 
-    <!-- For development: copy output dll directly to EXILED path -->
-    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-        <Copy SourceFiles="$(ProjectDir)bin\Debug\$(ProjectName).dll" DestinationFolder="$(EXILED_PLUGINS)" SkipUnchangedFiles="false" />
-    </Target>
+	<Target Name="CopyToPlugins" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Debug'">
+		<!-- For development: copy output dll directly to EXILED path -->
+		<Copy SourceFiles="$(OutputPath)$(ProjectName).dll" DestinationFolder="$(EXILED_PLUGINS)" SkipUnchangedFiles="false" />
+	</Target>
+
+	<Target Name="MergeWithCore" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Release'">
+		<!-- This merges the CommonUtils.Core.dll with this dll so it doesn't need to be shipped as a dependency. -->
+		<Exec Command="$(ILMergeConsolePath) ^
+			  /lib:$(EXILED_REFERENCES) ^
+			  /lib:$(EXILED_PLUGINS)\dependencies ^
+			  /out:$(OutputPath)$(ProjectName).dll ^
+			  $(OutputPath)$(ProjectName).dll ^
+			  $(EXILED_PLUGINS)\dependencies\CommonUtils.Core.dll" />
+	</Target>
 
     <PropertyGroup>
         <RepositoryUrl>https://github.com/reid-sutherland/RoundReports</RepositoryUrl>
@@ -28,6 +38,8 @@
 		<PackageReference Include="Lib.Harmony" Version="$(HarmonyVersion)" />
 		<PackageReference Include="StyleCop.Analyzers" Version="$(StyleCopVersion)" IncludeAssets="All" PrivateAssets="All" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+
+		<PackageReference Include="ILMerge" Version="3.0.40" />
     </ItemGroup>
 
 	<ItemGroup>
