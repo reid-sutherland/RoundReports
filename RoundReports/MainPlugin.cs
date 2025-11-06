@@ -38,7 +38,7 @@ public class MainPlugin : Plugin<Config, Translation>
     public override Version Version { get; } = new(1, 1, 0);
 
     /// <inheritdoc/>
-    public override Version RequiredExiledVersion { get; } = new(9, 6, 1);
+    public override Version RequiredExiledVersion { get; } = new(9, 10, 1);
 
     /// <inheritdoc/>
     public override PluginPriority Priority { get; } = PluginPriority.Medium;
